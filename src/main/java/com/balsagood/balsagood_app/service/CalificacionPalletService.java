@@ -25,6 +25,10 @@ public class CalificacionPalletService {
         return calificacionPalletRepository.save(calificacionPallet);
     }
 
+    public List<CalificacionPallet> saveAll(List<CalificacionPallet> calificaciones) {
+        return calificacionPalletRepository.saveAll(calificaciones);
+    }
+
     public void deleteById(Integer id) {
         calificacionPalletRepository.deleteById(id);
     }

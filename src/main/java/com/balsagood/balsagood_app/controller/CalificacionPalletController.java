@@ -42,6 +42,18 @@ public class CalificacionPalletController {
         return mapper.toCalificacionPalletDTO(saved);
     }
 
+    @PostMapping("/batch")
+    public ResponseEntity<List<CalificacionPalletDTO>> createRatingsBatch(
+            @RequestBody List<CalificacionPalletDTO> dtos) {
+        List<CalificacionPallet> entities = dtos.stream()
+                .map(mapper::toCalificacionPalletEntity)
+                .collect(Collectors.toList());
+        List<CalificacionPallet> saved = calificacionPalletService.saveAll(entities);
+        return ResponseEntity.ok(saved.stream()
+                .map(mapper::toCalificacionPalletDTO)
+                .collect(Collectors.toList()));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<CalificacionPalletDTO> updateCalificacionPallet(@PathVariable Integer id,
             @RequestBody CalificacionPalletDTO dto) {

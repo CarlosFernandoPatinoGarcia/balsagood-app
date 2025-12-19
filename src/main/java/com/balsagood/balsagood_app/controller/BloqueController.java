@@ -7,7 +7,9 @@ import com.balsagood.balsagood_app.util.AppMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,6 +29,13 @@ public class BloqueController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/listos")
+    public List<BloqueDTO> getReadyBlocks() {
+        return bloqueService.findReadyBlocks().stream()
+                .map(mapper::toBloqueDTO)
+                .collect(Collectors.toList());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<BloqueDTO> getBloqueById(@PathVariable Integer id) {
         return bloqueService.findById(id)
@@ -40,6 +49,28 @@ public class BloqueController {
         Bloque bloque = mapper.toBloqueEntity(bloqueDTO);
         Bloque saved = bloqueService.save(bloque);
         return mapper.toBloqueDTO(saved);
+    }
+
+    @PostMapping("/presentado")
+    public BloqueDTO registerPresentado(@RequestBody BloqueDTO bloqueDTO) {
+        Bloque bloque = mapper.toBloqueEntity(bloqueDTO);
+        Bloque saved = bloqueService.registerPresentado(bloque);
+        return mapper.toBloqueDTO(saved);
+    }
+
+    @PutMapping("/{id}/encolado")
+    public ResponseEntity<BloqueDTO> updateEncolado(@PathVariable Integer id,
+            @RequestBody Map<String, BigDecimal> payload) {
+        BigDecimal pesoConCola = payload.get("bPesoConCola");
+        if (pesoConCola == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        try {
+            Bloque updated = bloqueService.updateEncolado(id, pesoConCola);
+            return ResponseEntity.ok(mapper.toBloqueDTO(updated));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}")
