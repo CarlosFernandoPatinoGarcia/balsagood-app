@@ -176,7 +176,7 @@ public class AppMapper {
                 bloque.getBPesoSinCola(),
                 bloque.getBPesoConCola(),
                 bloque.getBCodigo(),
-                bloque.getBEstado());
+                bloque.getEstado());
     }
 
     public Bloque toBloqueEntity(BloqueDTO dto) {
@@ -192,7 +192,7 @@ public class AppMapper {
         bloque.setBBftFinal(dto.getBBftFinal());
         bloque.setBPesoSinCola(dto.getBPesoSinCola());
         bloque.setBPesoConCola(dto.getBPesoConCola());
-        bloque.setBEstado(dto.getBEstado());
+        bloque.setEstado(dto.getEstado());
         return bloque;
     }
 

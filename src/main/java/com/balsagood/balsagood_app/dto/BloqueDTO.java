@@ -19,5 +19,5 @@ public class BloqueDTO {
     private BigDecimal bPesoSinCola;
     private BigDecimal bPesoConCola;
     private Long bCodigo;
-    private String bEstado;
+    private String estado;
 }

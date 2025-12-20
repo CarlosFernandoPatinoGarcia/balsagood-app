@@ -48,5 +48,5 @@ public class Bloque {
     private Long bCodigo;
 
     @Column(name = "b_estado", length = 50)
-    private String bEstado;
+    private String estado;
 }

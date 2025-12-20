@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface BloqueRepository extends JpaRepository<Bloque, Integer> {
-    List<Bloque> findByBEstado(String bEstado);
+    List<Bloque> findByEstado(String estado);
 }

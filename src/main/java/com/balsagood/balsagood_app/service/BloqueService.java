@@ -24,27 +24,27 @@ public class BloqueService {
 
     public Bloque save(Bloque bloque) {
         // If state is not set, default to PRESENTADO if creating
-        if (bloque.getIdBloque() == null && bloque.getBEstado() == null) {
-            bloque.setBEstado("PRESENTADO");
+        if (bloque.getIdBloque() == null && bloque.getEstado() == null) {
+            bloque.setEstado("PRESENTADO");
         }
         return bloqueRepository.save(bloque);
     }
 
     public Bloque registerPresentado(Bloque bloque) {
-        bloque.setBEstado("PRESENTADO");
+        bloque.setEstado("PRESENTADO");
         return bloqueRepository.save(bloque);
     }
 
     public Bloque updateEncolado(Integer id, BigDecimal pesoConCola) {
         return bloqueRepository.findById(id).map(bloque -> {
             bloque.setBPesoConCola(pesoConCola);
-            bloque.setBEstado("ENCOLADO");
+            bloque.setEstado("ENCOLADO");
             return bloqueRepository.save(bloque);
         }).orElseThrow(() -> new RuntimeException("Bloque no encontrado"));
     }
 
     public List<Bloque> findReadyBlocks() {
-        return bloqueRepository.findByBEstado("LISTO");
+        return bloqueRepository.findByEstado("LISTO");
     }
 
     public void deleteById(Integer id) {
