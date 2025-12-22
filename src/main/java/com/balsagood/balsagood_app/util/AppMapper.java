@@ -200,12 +200,27 @@ public class AppMapper {
     public LoteSecadoDTO toLoteSecadoDTO(LoteSecado lote) {
         if (lote == null)
             return null;
+
+        String estado = "PROGRAMADO";
+        java.time.LocalDateTime now = java.time.LocalDateTime.now();
+
+        if (lote.getBftTotalLote() != null) {
+            estado = "FINALIZADO";
+        } else if (lote.getLoteFechaFin() != null && now.isAfter(lote.getLoteFechaFin())) {
+            estado = "LISTO PARA BFT";
+        } else if (lote.getLoteFechaInicio() != null && now.isAfter(lote.getLoteFechaInicio())
+                && (lote.getLoteFechaFin() == null || now.isBefore(lote.getLoteFechaFin()))) {
+            estado = "SECANDO";
+        }
+
         return new LoteSecadoDTO(
                 lote.getIdLote(),
                 toCamaraDTO(lote.getCamara()),
                 lote.getLoteFechaInicio(),
                 lote.getLoteFechaFin(),
-                lote.getLoteObservaciones());
+                lote.getLoteObservaciones(),
+                lote.getBftTotalLote(),
+                estado);
     }
 
     public LoteSecado toLoteSecadoEntity(LoteSecadoDTO dto) {
@@ -217,6 +232,7 @@ public class AppMapper {
         lote.setLoteFechaInicio(dto.getLoteFechaInicio());
         lote.setLoteFechaFin(dto.getLoteFechaFin());
         lote.setLoteObservaciones(dto.getLoteObservaciones());
+        lote.setBftTotalLote(dto.getBftTotalLote());
         return lote;
     }
 
@@ -227,8 +243,7 @@ public class AppMapper {
         return new DetalleSecadoDTO(
                 detalle.getIdDetalleSecado(),
                 toPalletVerdeDTO(detalle.getPalletVerde()),
-                toLoteSecadoDTO(detalle.getLoteSecado()),
-                detalle.getBftLotePostSecado());
+                toLoteSecadoDTO(detalle.getLoteSecado()));
     }
 
     public DetalleSecado toDetalleSecadoEntity(DetalleSecadoDTO dto) {
@@ -238,7 +253,6 @@ public class AppMapper {
         detalle.setIdDetalleSecado(dto.getIdDetalleSecado());
         detalle.setPalletVerde(toPalletVerdeEntity(dto.getPalletVerde()));
         detalle.setLoteSecado(toLoteSecadoEntity(dto.getLoteSecado()));
-        detalle.setBftLotePostSecado(dto.getBftLotePostSecado());
         return detalle;
     }
 

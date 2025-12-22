@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,4 +31,7 @@ public class LoteSecado {
 
     @Column(name = "lote_observaciones", columnDefinition = "TEXT")
     private String loteObservaciones;
+
+    @Column(name = "bft_total_lote", precision = 12, scale = 4)
+    private BigDecimal bftTotalLote;
 }

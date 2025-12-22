@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface DetalleSecadoRepository extends JpaRepository<DetalleSecado, Integer> {
     List<DetalleSecado> findByLoteSecado(LoteSecado loteSecado);
+
+    List<DetalleSecado> findByLoteSecado_IdLote(Integer idLote);
 }
