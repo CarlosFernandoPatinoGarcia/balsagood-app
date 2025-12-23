@@ -52,5 +52,20 @@ public class IngresoCompletoRequest {
 
         @JsonProperty("motivo")
         private String motivo;
+
+        @JsonProperty("largo")
+        private BigDecimal largo;
+
+        @JsonProperty("espesor")
+        private BigDecimal espesor;
+
+        @JsonProperty("cantidad")
+        private Integer cantidad;
+
+        @JsonProperty("es_castigada")
+        private Boolean esCastigada;
+
+        @JsonProperty("largo_original")
+        private BigDecimal largoOriginal;
     }
 }

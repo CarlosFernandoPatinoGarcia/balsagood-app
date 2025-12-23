@@ -85,7 +85,7 @@ public class GestionSecadoService {
     public String getEstadoLote(LoteSecado lote) {
         LocalDateTime now = LocalDateTime.now();
         if (lote.getLoteFechaFin() != null && now.isAfter(lote.getLoteFechaFin())) {
-            return "LISTO";
+            return "LISTO PARA BFT";
         } else if (now.isAfter(lote.getLoteFechaInicio())
                 && (lote.getLoteFechaFin() == null || now.isBefore(lote.getLoteFechaFin()))) {
             return "SECANDO";
