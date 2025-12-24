@@ -55,13 +55,22 @@ public class PalletVerdeService {
     @org.springframework.transaction.annotation.Transactional
     public void procesarIngresoCompleto(com.balsagood.balsagood_app.dto.IngresoCompletoRequest request) {
         // 1. Gestión de Proveedor
-        com.balsagood.balsagood_app.model.Proveedor proveedor = proveedorRepository
-                .findByProvNombre(request.getProvNombre())
-                .orElseGet(() -> {
-                    com.balsagood.balsagood_app.model.Proveedor newProv = new com.balsagood.balsagood_app.model.Proveedor();
-                    newProv.setProvNombre(request.getProvNombre());
-                    return proveedorRepository.save(newProv);
-                });
+        com.balsagood.balsagood_app.model.Proveedor proveedor = null;
+
+        if (request.getIdProveedor() != null) {
+            proveedor = proveedorRepository.findById(request.getIdProveedor())
+                    .orElse(null);
+        }
+
+        if (proveedor == null) {
+            proveedor = proveedorRepository
+                    .findByProvNombre(request.getProvNombre())
+                    .orElseGet(() -> {
+                        com.balsagood.balsagood_app.model.Proveedor newProv = new com.balsagood.balsagood_app.model.Proveedor();
+                        newProv.setProvNombre(request.getProvNombre());
+                        return proveedorRepository.save(newProv);
+                    });
+        }
 
         // 2. Creación de Recepción
         com.balsagood.balsagood_app.model.Recepcion recepcion = new com.balsagood.balsagood_app.model.Recepcion();
@@ -103,8 +112,7 @@ public class PalletVerdeService {
 
                 BigDecimal largo = cal.getLargo() != null ? cal.getLargo() : BigDecimal.ZERO;
                 BigDecimal espesor = cal.getEspesor() != null ? cal.getEspesor() : BigDecimal.ZERO;
-                BigDecimal cantidadVal = cal.getCantidad() != null ? new BigDecimal(cal.getCantidad())
-                        : BigDecimal.ZERO;
+                BigDecimal cantidadVal = cal.getCantidad() != null ? cal.getCantidad() : BigDecimal.ZERO;
                 Boolean esCastigada = cal.getEsCastigada() != null ? cal.getEsCastigada() : false;
 
                 item.setLargo(largo);

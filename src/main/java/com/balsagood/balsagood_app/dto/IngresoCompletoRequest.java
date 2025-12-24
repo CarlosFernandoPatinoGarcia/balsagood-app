@@ -15,6 +15,9 @@ public class IngresoCompletoRequest {
     @JsonProperty("fecha_ingreso")
     private LocalDate fechaIngreso;
 
+    @JsonProperty("id_proveedor")
+    private Integer idProveedor;
+
     @JsonProperty("prov_nombre")
     private String provNombre;
 
@@ -55,10 +58,10 @@ public class IngresoCompletoRequest {
         private BigDecimal espesor;
 
         @JsonProperty("cantidad")
-        private Integer cantidad;
+        private BigDecimal cantidad;
 
-        @JsonProperty("es_castigada")
-        @com.fasterxml.jackson.annotation.JsonAlias("esCastigada")
+        @JsonProperty("es_castigado")
+        @com.fasterxml.jackson.annotation.JsonAlias({ "esCastigada", "esCastigado", "es_castigada" })
         private Boolean esCastigada;
 
         @JsonProperty("largo_original")

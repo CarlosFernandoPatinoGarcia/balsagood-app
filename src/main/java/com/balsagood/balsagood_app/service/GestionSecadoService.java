@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -64,7 +65,8 @@ public class GestionSecadoService {
         lote.setLoteFechaInicio(dto.getLoteFechaInicio());
         lote.setLoteFechaFin(dto.getLoteFechaFin());
         lote.setLoteObservaciones(dto.getLoteObservaciones());
-        lote.setBftTotalLote(BigDecimal.ZERO); // Inicializar en 0
+        // lote.setBftTotalLote(BigDecimal.ZERO); // Inicializar en 0
+        lote.setBftTotalLote(null);
         lote = loteSecadoRepository.save(lote);
 
         // Crear Detalle y Actualizar Pallets
@@ -118,8 +120,12 @@ public class GestionSecadoService {
             palletVerdeRepository.save(pallet);
         }
 
-        // Registrar sumatoria en el lote
-        lote.setBftTotalLote(sumatoriaBft);
+        BigDecimal factorMerma = new BigDecimal("0.98");
+
+        BigDecimal bftFinalSeco = sumatoriaBft.multiply(factorMerma).setScale(2, RoundingMode.HALF_UP);
+
+        // Registrar el BFT Final (Seco) en el lote
+        lote.setBftTotalLote(bftFinalSeco);
         loteSecadoRepository.save(lote);
     }
 }
