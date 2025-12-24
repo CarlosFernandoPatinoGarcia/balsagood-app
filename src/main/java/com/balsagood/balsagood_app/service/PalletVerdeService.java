@@ -21,9 +21,6 @@ public class PalletVerdeService {
     @Autowired
     private com.balsagood.balsagood_app.repository.RecepcionRepository recepcionRepository;
 
-    @Autowired
-    private com.balsagood.balsagood_app.repository.CalificacionPalletRepository calificacionPalletRepository;
-
     public List<PalletVerde> findAll() {
         return palletVerdeRepository.findAll();
     }
@@ -87,12 +84,6 @@ public class PalletVerdeService {
         pallet.setPalletEspesor(dims.getEspesor());
         pallet.setPalletCantPlantillas(dims.getCantidadPlantilla());
 
-        // Calculo de Pallet Ancho: ancho_plantilla * cantidad_plantilla
-        // Note: keeping existing logic for palletAncho field, but using fixed 81 might
-        // be more appropriate?
-        // Using dims.getAnchoPlantilla() from request might conflict if we say it is
-        // fixed.
-        // I will use the fixed value 81 for consistency.
         BigDecimal palletAncho = new BigDecimal("81").multiply(new BigDecimal(dims.getCantidadPlantilla()));
         pallet.setPalletAncho(palletAncho);
 
@@ -103,45 +94,59 @@ public class PalletVerdeService {
         BigDecimal totalBftAceptado = BigDecimal.ZERO;
 
         if (request.getCalificaciones() != null) {
-            // First pass: Calculate Totals
-            for (com.balsagood.balsagood_app.dto.IngresoCompletoRequest.Calificacion cal : request
+            java.util.List<com.balsagood.balsagood_app.model.ItemPallet> items = new java.util.ArrayList<>();
+
+            for (com.balsagood.balsagood_app.dto.IngresoCompletoRequest.DetalleCalificacion cal : request
                     .getCalificaciones()) {
+                com.balsagood.balsagood_app.model.ItemPallet item = new com.balsagood.balsagood_app.model.ItemPallet();
+                item.setPalletVerde(pallet);
+
                 BigDecimal largo = cal.getLargo() != null ? cal.getLargo() : BigDecimal.ZERO;
                 BigDecimal espesor = cal.getEspesor() != null ? cal.getEspesor() : BigDecimal.ZERO;
-                BigDecimal cantidad = cal.getCantidad() != null ? new BigDecimal(cal.getCantidad()) : BigDecimal.ZERO;
+                BigDecimal cantidadVal = cal.getCantidad() != null ? new BigDecimal(cal.getCantidad())
+                        : BigDecimal.ZERO;
                 Boolean esCastigada = cal.getEsCastigada() != null ? cal.getEsCastigada() : false;
+
+                item.setLargo(largo);
+                item.setEspesor(espesor);
+                item.setCantidad(cantidadVal);
+                item.setEsCastigada(esCastigada);
+                // Only set original length if it adheres to logic, using default from DTO
+                item.setLargoOriginal(cal.getLargoOriginal());
 
                 BigDecimal bftItemRecibido;
                 BigDecimal bftItemAceptado;
 
                 if (Boolean.TRUE.equals(esCastigada)) {
-                    // Punished Logic
                     BigDecimal largoOriginal = cal.getLargoOriginal() != null ? cal.getLargoOriginal() : largo;
 
-                    // Recibido uses Original Length
                     bftItemRecibido = largoOriginal.multiply(new BigDecimal("81"))
                             .multiply(espesor)
-                            .multiply(cantidad)
+                            .multiply(cantidadVal)
                             .divide(new BigDecimal("12"), 4, RoundingMode.HALF_UP);
 
-                    // Aceptado uses Punished Length (which is the 'largo' field in the item)
                     bftItemAceptado = largo.multiply(new BigDecimal("81"))
                             .multiply(espesor)
-                            .multiply(cantidad)
+                            .multiply(cantidadVal)
                             .divide(new BigDecimal("12"), 4, RoundingMode.HALF_UP);
                 } else {
-                    // Normal Logic
                     BigDecimal bftItem = largo.multiply(new BigDecimal("81"))
                             .multiply(espesor)
-                            .multiply(cantidad)
+                            .multiply(cantidadVal)
                             .divide(new BigDecimal("12"), 4, RoundingMode.HALF_UP);
                     bftItemRecibido = bftItem;
                     bftItemAceptado = bftItem;
                 }
 
+                item.setBftRecibido(bftItemRecibido);
+                item.setBftAceptado(bftItemAceptado);
+
                 totalBftRecibido = totalBftRecibido.add(bftItemRecibido);
                 totalBftAceptado = totalBftAceptado.add(bftItemAceptado);
+
+                items.add(item);
             }
+            pallet.setItems(items);
         }
 
         pallet.setBftVerdeRecibido(totalBftRecibido);
@@ -151,17 +156,6 @@ public class PalletVerdeService {
 
         pallet = palletVerdeRepository.save(pallet);
 
-        // 5. Registro de Calificaciones
-        if (request.getCalificaciones() != null) {
-            for (com.balsagood.balsagood_app.dto.IngresoCompletoRequest.Calificacion calRequest : request
-                    .getCalificaciones()) {
-                com.balsagood.balsagood_app.model.CalificacionPallet cal = new com.balsagood.balsagood_app.model.CalificacionPallet();
-                cal.setPalletVerde(pallet);
-                cal.setCalificacionValor(calRequest.getValor());
-                cal.setCalificacionMotivo(calRequest.getMotivo());
-                cal.setCalificacionFecha(java.time.LocalDateTime.now());
-                calificacionPalletRepository.save(cal);
-            }
-        }
+        // Removed CalificacionPallet saving loop as requested.
     }
 }

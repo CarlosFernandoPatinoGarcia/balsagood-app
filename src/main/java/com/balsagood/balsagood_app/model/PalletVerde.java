@@ -55,6 +55,9 @@ public class PalletVerde {
     @Column(name = "pallet_observacion", columnDefinition = "TEXT")
     private String palletObservacion;
 
+    @OneToMany(mappedBy = "palletVerde", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<ItemPallet> items;
+
     @PrePersist
     protected void onCreate() {
         if (palletEstado == null) {

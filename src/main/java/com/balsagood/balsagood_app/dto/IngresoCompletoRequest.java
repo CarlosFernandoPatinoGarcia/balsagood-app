@@ -28,7 +28,7 @@ public class IngresoCompletoRequest {
     private Dimensiones dimensiones;
 
     @JsonProperty("calificaciones")
-    private List<Calificacion> calificaciones;
+    private List<DetalleCalificacion> calificaciones;
 
     @Data
     public static class Dimensiones {
@@ -46,12 +46,7 @@ public class IngresoCompletoRequest {
     }
 
     @Data
-    public static class Calificacion {
-        @JsonProperty("valor")
-        private BigDecimal valor;
-
-        @JsonProperty("motivo")
-        private String motivo;
+    public static class DetalleCalificacion {
 
         @JsonProperty("largo")
         private BigDecimal largo;
@@ -63,6 +58,7 @@ public class IngresoCompletoRequest {
         private Integer cantidad;
 
         @JsonProperty("es_castigada")
+        @com.fasterxml.jackson.annotation.JsonAlias("esCastigada")
         private Boolean esCastigada;
 
         @JsonProperty("largo_original")

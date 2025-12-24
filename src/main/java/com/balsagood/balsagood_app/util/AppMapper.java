@@ -298,29 +298,4 @@ public class AppMapper {
         return detalle;
     }
 
-    // --- CalificacionPallet ---
-    public CalificacionPalletDTO toCalificacionPalletDTO(CalificacionPallet calificacion) {
-        if (calificacion == null)
-            return null;
-        return new CalificacionPalletDTO(
-                calificacion.getIdCalificacion(),
-                toPalletVerdeDTO(calificacion.getPalletVerde()),
-                calificacion.getCalificacionFecha(),
-                calificacion.getCalificacionValor(),
-                calificacion.getCalificadorUsuario(),
-                calificacion.getCalificacionMotivo());
-    }
-
-    public CalificacionPallet toCalificacionPalletEntity(CalificacionPalletDTO dto) {
-        if (dto == null)
-            return null;
-        CalificacionPallet calificacion = new CalificacionPallet();
-        calificacion.setIdCalificacion(dto.getIdCalificacion());
-        calificacion.setPalletVerde(toPalletVerdeEntity(dto.getPalletVerde()));
-        calificacion.setCalificacionFecha(dto.getCalificacionFecha());
-        calificacion.setCalificacionValor(dto.getCalificacionValor());
-        calificacion.setCalificadorUsuario(dto.getCalificadorUsuario());
-        calificacion.setCalificacionMotivo(dto.getCalificacionMotivo());
-        return calificacion;
-    }
 }
