@@ -42,4 +42,14 @@ public class ItemPallet {
 
     @Column(name = "bft_aceptado", precision = 12, scale = 4)
     private BigDecimal bftAceptado;
+
+    @Column(name = "estado_item", length = 50)
+    private String estadoItem;
+
+    @PrePersist
+    protected void onCreate() {
+        if (estadoItem == null) {
+            estadoItem = "ACTIVO";
+        }
+    }
 }

@@ -89,7 +89,8 @@ public class AppMapper {
         return new CamaraDTO(
                 camara.getIdCamara(),
                 camara.getCamaraDescripcion(),
-                camara.getCamaraCapacidad());
+                camara.getCamaraCapacidad(),
+                camara.getCapacidadDisponible());
     }
 
     public Camara toCamaraEntity(CamaraDTO dto) {
@@ -98,7 +99,8 @@ public class AppMapper {
         return new Camara(
                 dto.getIdCamara(),
                 dto.getCamaraDescripcion(),
-                dto.getCamaraCapacidad());
+                dto.getCamaraCapacidad(),
+                dto.getCapacidadDisponible());
     }
 
     // --- Despacho ---
@@ -130,13 +132,10 @@ public class AppMapper {
                 toRecepcionDTO(pallet.getRecepcion()),
                 pallet.getPalletNumero(),
                 pallet.getPalletEmplantillador(),
-                pallet.getPalletCantPlantillas(),
-                pallet.getPalletAncho(),
-                pallet.getPalletEspesor(),
-                pallet.getPalletLargo(),
                 pallet.getPalletAnchoPlantilla(),
                 pallet.getBftVerdeRecibido(),
                 pallet.getBftVerdeAceptado(),
+                pallet.getBftVerdeSeco(),
                 pallet.getPalletEstado(),
                 pallet.getPalletObservacion());
     }
@@ -144,18 +143,16 @@ public class AppMapper {
     public PalletVerde toPalletVerdeEntity(PalletVerdeDTO dto) {
         if (dto == null)
             return null;
+
         PalletVerde pallet = new PalletVerde();
         pallet.setIdPallet(dto.getIdPallet());
         pallet.setRecepcion(toRecepcionEntity(dto.getRecepcion()));
         pallet.setPalletNumero(dto.getPalletNumero());
         pallet.setPalletEmplantillador(dto.getPalletEmplantillador());
-        pallet.setPalletCantPlantillas(dto.getPalletCantPlantillas());
-        pallet.setPalletAncho(dto.getPalletAncho());
-        pallet.setPalletEspesor(dto.getPalletEspesor());
-        pallet.setPalletLargo(dto.getPalletLargo());
         pallet.setPalletAnchoPlantilla(dto.getPalletAnchoPlantilla());
         pallet.setBftVerdeRecibido(dto.getBftVerdeRecibido());
         pallet.setBftVerdeAceptado(dto.getBftVerdeAceptado());
+        pallet.setBftVerdeSeco(dto.getBftVerdeSeco());
         pallet.setPalletEstado(dto.getPalletEstado());
         pallet.setPalletObservacion(dto.getPalletObservacion());
         return pallet;
@@ -204,7 +201,7 @@ public class AppMapper {
         String estado = "PROGRAMADO";
         java.time.LocalDateTime now = java.time.LocalDateTime.now();
 
-        if (lote.getBftTotalLote() != null) {
+        if (lote.getBftLoteSeco() != null) {
             estado = "FINALIZADO";
         } else if (lote.getLoteFechaFin() != null && now.isAfter(lote.getLoteFechaFin())) {
             estado = "LISTO PARA BFT";
@@ -216,10 +213,12 @@ public class AppMapper {
         return new LoteSecadoDTO(
                 lote.getIdLote(),
                 toCamaraDTO(lote.getCamara()),
+                lote.getLoteCodigo(),
                 lote.getLoteFechaInicio(),
                 lote.getLoteFechaFin(),
                 lote.getLoteObservaciones(),
                 lote.getBftTotalLote(),
+                lote.getBftLoteSeco(),
                 estado);
     }
 
@@ -229,10 +228,12 @@ public class AppMapper {
         LoteSecado lote = new LoteSecado();
         lote.setIdLote(dto.getIdLote());
         lote.setCamara(toCamaraEntity(dto.getCamara()));
+        lote.setLoteCodigo(dto.getLoteCodigo());
         lote.setLoteFechaInicio(dto.getLoteFechaInicio());
         lote.setLoteFechaFin(dto.getLoteFechaFin());
         lote.setLoteObservaciones(dto.getLoteObservaciones());
         lote.setBftTotalLote(dto.getBftTotalLote());
+        lote.setBftLoteSeco(dto.getBftLoteSeco());
         return lote;
     }
 

@@ -12,4 +12,5 @@ public class CamaraDTO {
     private Integer idCamara;
     private String camaraDescripcion;
     private BigDecimal camaraCapacidad;
+    private BigDecimal capacidadDisponible;
 }

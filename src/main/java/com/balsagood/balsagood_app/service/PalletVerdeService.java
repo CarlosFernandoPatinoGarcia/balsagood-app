@@ -1,5 +1,6 @@
 package com.balsagood.balsagood_app.service;
 
+import com.balsagood.balsagood_app.model.ItemPallet;
 import com.balsagood.balsagood_app.model.PalletVerde;
 import com.balsagood.balsagood_app.repository.PalletVerdeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class PalletVerdeService {
     @Autowired
     private com.balsagood.balsagood_app.repository.RecepcionRepository recepcionRepository;
 
+    @Autowired
+    private com.balsagood.balsagood_app.repository.ItemPalletRepository itemPalletRepository;
+
     public List<PalletVerde> findAll() {
         return palletVerdeRepository.findAll();
     }
@@ -30,21 +34,6 @@ public class PalletVerdeService {
     }
 
     public PalletVerde save(PalletVerde palletVerde) {
-        // Calculate BFT: (Largo * Ancho de Plantilla * Espesor * Numero de plantillas)
-        // / 12
-
-        BigDecimal bftRecibido = palletVerde.getPalletLargo()
-                .multiply(palletVerde.getPalletAnchoPlantilla())
-                .multiply(palletVerde.getPalletEspesor())
-                .multiply(new BigDecimal(palletVerde.getPalletCantPlantillas()))
-                .divide(new BigDecimal("12"), 4, RoundingMode.HALF_UP);
-
-        palletVerde.setBftVerdeRecibido(bftRecibido);
-
-        // Apply 0.9 shrinkage factor
-        BigDecimal bftAceptado = bftRecibido.multiply(new BigDecimal("0.9")).setScale(4, RoundingMode.HALF_UP);
-        palletVerde.setBftVerdeAceptado(bftAceptado);
-
         return palletVerdeRepository.save(palletVerde);
     }
 
@@ -87,14 +76,8 @@ public class PalletVerdeService {
         pallet.setPalletEmplantillador(request.getPalletEmplantillador());
 
         com.balsagood.balsagood_app.dto.IngresoCompletoRequest.Dimensiones dims = request.getDimensiones();
-        pallet.setPalletLargo(dims.getLargo());
         // Fix Width to 81
         pallet.setPalletAnchoPlantilla(new BigDecimal("81"));
-        pallet.setPalletEspesor(dims.getEspesor());
-        pallet.setPalletCantPlantillas(dims.getCantidadPlantilla());
-
-        BigDecimal palletAncho = new BigDecimal("81").multiply(new BigDecimal(dims.getCantidadPlantilla()));
-        pallet.setPalletAncho(palletAncho);
 
         // New BFT Calculation Logic: Sum of (L * 81 * E * Q) / 12 for each
         // qualification
@@ -166,4 +149,48 @@ public class PalletVerdeService {
 
         // Removed CalificacionPallet saving loop as requested.
     }
+
+    // En PalletVerdeService.java
+
+    private void recalcularTotalesPallet(PalletVerde pallet) {
+        if (pallet.getItems() == null || pallet.getItems().isEmpty()) {
+            pallet.setBftVerdeRecibido(BigDecimal.ZERO);
+            pallet.setBftVerdeAceptado(BigDecimal.ZERO);
+            return;
+        }
+
+        BigDecimal totalRecibido = BigDecimal.ZERO;
+        BigDecimal totalAceptado = BigDecimal.ZERO;
+
+        for (ItemPallet item : pallet.getItems()) {
+            // Ignore deleted items
+            if ("ELIMINADO".equals(item.getEstadoItem())) {
+                continue;
+            }
+
+            if (item.getBftRecibido() != null) {
+                totalRecibido = totalRecibido.add(item.getBftRecibido());
+            }
+            if (item.getBftAceptado() != null) {
+                totalAceptado = totalAceptado.add(item.getBftAceptado());
+            }
+        }
+
+        pallet.setBftVerdeRecibido(totalRecibido);
+        pallet.setBftVerdeAceptado(totalAceptado);
+
+        // Guardamos el padre con los nuevos totales
+        palletVerdeRepository.save(pallet);
+    }
+
+    public void eliminarItem(Integer idItem) {
+        ItemPallet item = itemPalletRepository.findById(idItem).orElseThrow();
+        PalletVerde pallet = item.getPalletVerde();
+
+        itemPalletRepository.delete(item); // Borras el hijo
+        pallet.getItems().remove(item); // Actualizas la lista en memoria (importante para el cálculo)
+
+        recalcularTotalesPallet(pallet); // Recalculas y guardas el padre
+    }
+
 }

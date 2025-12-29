@@ -29,9 +29,7 @@ public class CamaraController {
 
     @GetMapping("/estado/disponibles")
     public ResponseEntity<List<CamaraDTO>> getCamarasDisponibles() {
-        List<CamaraDTO> dtos = camaraService.findAvailable().stream()
-                .map(mapper::toCamaraDTO)
-                .collect(Collectors.toList());
+        List<CamaraDTO> dtos = camaraService.getCamarasConDisponibilidad();
         return ResponseEntity.ok(dtos);
     }
 

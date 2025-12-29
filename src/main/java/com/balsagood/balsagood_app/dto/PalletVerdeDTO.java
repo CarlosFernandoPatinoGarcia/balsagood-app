@@ -13,13 +13,10 @@ public class PalletVerdeDTO {
     private RecepcionDTO recepcion;
     private Integer palletNumero;
     private String palletEmplantillador;
-    private Integer palletCantPlantillas;
-    private BigDecimal palletAncho;
-    private BigDecimal palletEspesor;
-    private BigDecimal palletLargo;
     private BigDecimal palletAnchoPlantilla;
     private BigDecimal bftVerdeRecibido;
     private BigDecimal bftVerdeAceptado;
+    private BigDecimal bftVerdeSeco;
     private String palletEstado;
     private String palletObservacion;
 }

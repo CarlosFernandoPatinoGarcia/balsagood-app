@@ -54,19 +54,27 @@ public class GestionSecadoService {
             volumenTotal = volumenTotal.add(pallet.getBftVerdeAceptado());
         }
 
-        if (volumenTotal.compareTo(camara.getCamaraCapacidad()) > 0) {
-            throw new RuntimeException("La capacidad de la cámara es insuficiente. Capacidad: " +
-                    camara.getCamaraCapacidad() + ", Requerido: " + volumenTotal);
+        // Validar Capacidad Disponible (usando el campo persistido)
+        if (volumenTotal.compareTo(camara.getCapacidadDisponible()) > 0) {
+            throw new RuntimeException("La capacidad de la cámara es insuficiente. Disponible: " +
+                    camara.getCapacidadDisponible() + ", Requerido: " + volumenTotal);
         }
+
+        // Actualizar capacidad disponible de la cámara
+        camara.setCapacidadDisponible(camara.getCapacidadDisponible().subtract(volumenTotal));
+        camaraRepository.save(camara);
 
         // Crear Lote
         LoteSecado lote = new LoteSecado();
         lote.setCamara(camara);
+        lote.setLoteCodigo(dto.getLoteCodigo());
         lote.setLoteFechaInicio(dto.getLoteFechaInicio());
         lote.setLoteFechaFin(dto.getLoteFechaFin());
         lote.setLoteObservaciones(dto.getLoteObservaciones());
-        // lote.setBftTotalLote(BigDecimal.ZERO); // Inicializar en 0
-        lote.setBftTotalLote(null);
+        // Guardar el BFT Total (Verde/Entrada) en el lote
+        lote.setBftTotalLote(volumenTotal);
+        // El BFT Seco se calculará al finalizar
+        lote.setBftLoteSeco(null);
         lote = loteSecadoRepository.save(lote);
 
         // Crear Detalle y Actualizar Pallets
@@ -101,18 +109,23 @@ public class GestionSecadoService {
         LoteSecado lote = loteSecadoRepository.findById(idLote)
                 .orElseThrow(() -> new RuntimeException("Lote no encontrado"));
 
-        if (lote.getBftTotalLote() != null) {
+        if (lote.getBftLoteSeco() != null) {
             throw new RuntimeException("El lote ya ha sido finalizado previamente.");
         }
 
         List<DetalleSecado> detalles = detalleSecadoRepository.findByLoteSecado_IdLote(idLote);
-        BigDecimal sumatoriaBft = BigDecimal.ZERO;
+        BigDecimal sumatoriaBftSeco = BigDecimal.ZERO;
+        BigDecimal factorMerma = new BigDecimal("0.98");
 
         for (DetalleSecado detalle : detalles) {
             PalletVerde pallet = detalle.getPalletVerde();
-            // Sumar BFT
+
+            // Calcular BFT Seco del Pallet
             if (pallet.getBftVerdeAceptado() != null) {
-                sumatoriaBft = sumatoriaBft.add(pallet.getBftVerdeAceptado());
+                BigDecimal bftPalletSeco = pallet.getBftVerdeAceptado().multiply(factorMerma).setScale(2,
+                        RoundingMode.HALF_UP);
+                pallet.setBftVerdeSeco(bftPalletSeco);
+                sumatoriaBftSeco = sumatoriaBftSeco.add(bftPalletSeco);
             }
 
             // Cambiar estado a STOCK SECO
@@ -120,12 +133,21 @@ public class GestionSecadoService {
             palletVerdeRepository.save(pallet);
         }
 
-        BigDecimal factorMerma = new BigDecimal("0.98");
-
-        BigDecimal bftFinalSeco = sumatoriaBft.multiply(factorMerma).setScale(2, RoundingMode.HALF_UP);
-
         // Registrar el BFT Final (Seco) en el lote
-        lote.setBftTotalLote(bftFinalSeco);
+        lote.setBftLoteSeco(sumatoriaBftSeco);
         loteSecadoRepository.save(lote);
+
+        // Actualizar capacidad disponible de la cámara (liberar espacio)
+        // El espacio liberado es el BFT VERDE DE ENTRADA (bftTotalLote)
+        Camara camara = lote.getCamara();
+        if (lote.getBftTotalLote() != null) {
+            camara.setCapacidadDisponible(camara.getCapacidadDisponible().add(lote.getBftTotalLote()));
+            // Asegurar que no exceda la capacidad total (por si acaso hay inconsistencias
+            // manuales)
+            if (camara.getCapacidadDisponible().compareTo(camara.getCamaraCapacidad()) > 0) {
+                camara.setCapacidadDisponible(camara.getCamaraCapacidad());
+            }
+            camaraRepository.save(camara);
+        }
     }
 }

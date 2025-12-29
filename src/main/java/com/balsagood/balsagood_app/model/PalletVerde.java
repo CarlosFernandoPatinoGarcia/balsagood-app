@@ -28,18 +28,6 @@ public class PalletVerde {
     @Column(name = "pallet_emplantillador", length = 100)
     private String palletEmplantillador;
 
-    @Column(name = "pallet_cant_plantillas")
-    private Integer palletCantPlantillas;
-
-    @Column(name = "pallet_ancho", nullable = false, precision = 10, scale = 4)
-    private BigDecimal palletAncho;
-
-    @Column(name = "pallet_espesor", nullable = false, precision = 10, scale = 4)
-    private BigDecimal palletEspesor;
-
-    @Column(name = "pallet_largo", nullable = false, precision = 10, scale = 4)
-    private BigDecimal palletLargo;
-
     @Column(name = "pallet_ancho_plantilla", nullable = false, precision = 10, scale = 4)
     private BigDecimal palletAnchoPlantilla;
 
@@ -48,6 +36,9 @@ public class PalletVerde {
 
     @Column(name = "bft_verde_aceptado", nullable = false, precision = 12, scale = 4)
     private BigDecimal bftVerdeAceptado;
+
+    @Column(name = "bft_verde_seco", precision = 12, scale = 4)
+    private BigDecimal bftVerdeSeco;
 
     @Column(name = "pallet_estado", nullable = false, length = 50)
     private String palletEstado;

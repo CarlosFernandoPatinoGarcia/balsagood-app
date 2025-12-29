@@ -23,6 +23,9 @@ public class LoteSecado {
     @JoinColumn(name = "id_camara", nullable = false)
     private Camara camara;
 
+    @Column(name = "lote_codigo", nullable = false)
+    private String loteCodigo;
+
     @Column(name = "lote_fecha_inicio", nullable = false)
     private LocalDateTime loteFechaInicio;
 
@@ -34,4 +37,7 @@ public class LoteSecado {
 
     @Column(name = "bft_total_lote", precision = 12, scale = 4)
     private BigDecimal bftTotalLote;
+
+    @Column(name = "bft_lote_seco", precision = 12, scale = 4)
+    private BigDecimal bftLoteSeco;
 }

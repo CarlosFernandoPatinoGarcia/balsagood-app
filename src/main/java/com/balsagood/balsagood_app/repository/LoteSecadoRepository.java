@@ -9,6 +9,10 @@ import java.util.List;
 
 @Repository
 public interface LoteSecadoRepository extends JpaRepository<LoteSecado, Integer> {
-    @Query("SELECT DISTINCT l.camara.idCamara FROM LoteSecado l WHERE l.bftTotalLote IS NULL")
+    @Query("SELECT DISTINCT l.camara.idCamara FROM LoteSecado l WHERE l.bftLoteSeco IS NULL")
     List<Integer> findOccupiedCamaraIds();
+
+    @Query("SELECT COALESCE(SUM(l.bftTotalLote), 0) FROM LoteSecado l WHERE l.camara.idCamara = :idCamara AND l.bftLoteSeco IS NULL")
+    java.math.BigDecimal getSumBftActiveByCamaraId(
+            @org.springframework.data.repository.query.Param("idCamara") Integer idCamara);
 }

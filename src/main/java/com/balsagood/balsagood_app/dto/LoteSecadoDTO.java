@@ -12,9 +12,11 @@ import java.time.LocalDateTime;
 public class LoteSecadoDTO {
     private Integer idLote;
     private CamaraDTO camara;
+    private String loteCodigo;
     private LocalDateTime loteFechaInicio;
     private LocalDateTime loteFechaFin;
     private String loteObservaciones;
     private BigDecimal bftTotalLote;
+    private BigDecimal bftLoteSeco;
     private String estado;
 }

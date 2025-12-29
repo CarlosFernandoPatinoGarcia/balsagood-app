@@ -23,4 +23,14 @@ public class Camara {
 
     @Column(name = "camara_capacidad", nullable = false, precision = 10, scale = 2)
     private BigDecimal camaraCapacidad;
+
+    @Column(name = "capacidad_disponible", nullable = false, precision = 10, scale = 2)
+    private BigDecimal capacidadDisponible;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.capacidadDisponible == null) {
+            this.capacidadDisponible = this.camaraCapacidad;
+        }
+    }
 }

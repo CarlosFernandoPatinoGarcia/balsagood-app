@@ -42,4 +42,13 @@ public class CamaraService {
                 .filter(c -> !occupiedIds.contains(c.getIdCamara()))
                 .collect(java.util.stream.Collectors.toList());
     }
+
+    @Autowired
+    private com.balsagood.balsagood_app.util.AppMapper appMapper;
+
+    public List<com.balsagood.balsagood_app.dto.CamaraDTO> getCamarasConDisponibilidad() {
+        return camaraRepository.findAll().stream()
+                .map(appMapper::toCamaraDTO)
+                .collect(java.util.stream.Collectors.toList());
+    }
 }
