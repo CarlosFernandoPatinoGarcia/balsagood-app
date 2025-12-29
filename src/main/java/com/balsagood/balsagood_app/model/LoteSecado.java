@@ -40,4 +40,7 @@ public class LoteSecado {
 
     @Column(name = "bft_lote_seco", precision = 12, scale = 4)
     private BigDecimal bftLoteSeco;
+
+    @Column(name = "fecha_despacho")
+    private LocalDateTime fechaDespacho;
 }

@@ -35,6 +35,17 @@ public class LoteSecadoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/{id}/despacho")
+    public ResponseEntity<com.balsagood.balsagood_app.dto.LoteDespachoDTO> getLoteSecadoDespachoById(
+            @PathVariable Integer id) {
+        try {
+            com.balsagood.balsagood_app.dto.LoteDespachoDTO dto = loteSecadoService.obtenerDatosDespacho(id);
+            return ResponseEntity.ok(dto);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping
     public LoteSecadoDTO createLoteSecado(@RequestBody LoteSecadoDTO dto) {
         LoteSecado entity = mapper.toLoteSecadoEntity(dto);
@@ -54,6 +65,9 @@ public class LoteSecadoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @Autowired
+    private com.balsagood.balsagood_app.service.GestionSecadoService gestionSecadoService;
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLoteSecado(@PathVariable Integer id) {
         if (loteSecadoService.findById(id).isPresent()) {
@@ -61,5 +75,11 @@ public class LoteSecadoController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/despachar/{idLote}")
+    public ResponseEntity<String> despacharLote(@PathVariable Integer idLote) {
+        gestionSecadoService.despacharLoteATaller(idLote);
+        return ResponseEntity.ok("Lote despachado a taller correctamente.");
     }
 }

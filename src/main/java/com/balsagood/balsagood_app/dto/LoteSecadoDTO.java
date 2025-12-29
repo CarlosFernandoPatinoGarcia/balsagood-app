@@ -18,5 +18,6 @@ public class LoteSecadoDTO {
     private String loteObservaciones;
     private BigDecimal bftTotalLote;
     private BigDecimal bftLoteSeco;
+    private LocalDateTime fechaDespacho;
     private String estado;
 }

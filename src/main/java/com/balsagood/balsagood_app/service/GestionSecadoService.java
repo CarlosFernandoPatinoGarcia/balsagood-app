@@ -149,5 +149,31 @@ public class GestionSecadoService {
             }
             camaraRepository.save(camara);
         }
+        camaraRepository.save(camara);
+    }
+
+    // 5. Despacho a Taller
+    @Transactional
+    public void despacharLoteATaller(Integer idLote) {
+        LoteSecado lote = loteSecadoRepository.findById(idLote)
+                .orElseThrow(() -> new RuntimeException("Lote no encontrado"));
+
+        if (lote.getBftLoteSeco() == null) {
+            throw new RuntimeException("El lote no ha finalizado el proceso de secado.");
+        }
+
+        if (lote.getFechaDespacho() != null) {
+            throw new RuntimeException("El lote ya ha sido despachado a taller previamente.");
+        }
+
+        List<DetalleSecado> detalles = detalleSecadoRepository.findByLoteSecado_IdLote(idLote);
+        for (DetalleSecado detalle : detalles) {
+            PalletVerde pallet = detalle.getPalletVerde();
+            pallet.setPalletEstado("CONSUMIDO");
+            palletVerdeRepository.save(pallet);
+        }
+
+        lote.setFechaDespacho(LocalDateTime.now());
+        loteSecadoRepository.save(lote);
     }
 }

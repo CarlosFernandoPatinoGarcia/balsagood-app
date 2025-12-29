@@ -201,7 +201,9 @@ public class AppMapper {
         String estado = "PROGRAMADO";
         java.time.LocalDateTime now = java.time.LocalDateTime.now();
 
-        if (lote.getBftLoteSeco() != null) {
+        if (lote.getFechaDespacho() != null) {
+            estado = "DESPACHADO";
+        } else if (lote.getBftLoteSeco() != null) {
             estado = "FINALIZADO";
         } else if (lote.getLoteFechaFin() != null && now.isAfter(lote.getLoteFechaFin())) {
             estado = "LISTO PARA BFT";
@@ -219,6 +221,7 @@ public class AppMapper {
                 lote.getLoteObservaciones(),
                 lote.getBftTotalLote(),
                 lote.getBftLoteSeco(),
+                lote.getFechaDespacho(),
                 estado);
     }
 
@@ -234,6 +237,7 @@ public class AppMapper {
         lote.setLoteObservaciones(dto.getLoteObservaciones());
         lote.setBftTotalLote(dto.getBftTotalLote());
         lote.setBftLoteSeco(dto.getBftLoteSeco());
+        lote.setFechaDespacho(dto.getFechaDespacho());
         return lote;
     }
 

@@ -7,9 +7,9 @@ import java.util.List;
 @Data
 public class CrearLoteDTO {
     private Integer idCamara;
-    private String loteCodigo;
     private LocalDateTime loteFechaInicio;
     private LocalDateTime loteFechaFin;
     private List<Integer> idPallets;
     private String loteObservaciones;
+    private String loteCodigo;
 }
