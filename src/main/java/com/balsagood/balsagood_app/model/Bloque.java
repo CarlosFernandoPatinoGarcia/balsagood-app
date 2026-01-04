@@ -26,16 +26,16 @@ public class Bloque {
     @JoinColumn(name = "id_cuerpo", nullable = false)
     private Cuerpo cuerpo;
 
-    @Column(name = "b_largo", nullable = false, precision = 10, scale = 4)
+    @Column(name = "b_largo", nullable = true, precision = 10, scale = 4)
     private BigDecimal bLargo;
 
-    @Column(name = "b_ancho", nullable = false, precision = 10, scale = 4)
+    @Column(name = "b_ancho", nullable = true, precision = 10, scale = 4)
     private BigDecimal bAncho;
 
-    @Column(name = "b_alto", nullable = false, precision = 10, scale = 4)
+    @Column(name = "b_alto", nullable = true, precision = 10, scale = 4)
     private BigDecimal bAlto;
 
-    @Column(name = "b_bft_final", nullable = false, precision = 12, scale = 4)
+    @Column(name = "b_bft_final", nullable = true, precision = 12, scale = 4)
     private BigDecimal bBftFinal;
 
     @Column(name = "b_peso_sin_cola", nullable = false, precision = 10, scale = 4)

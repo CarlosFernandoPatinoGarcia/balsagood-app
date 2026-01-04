@@ -27,6 +27,13 @@ public class ProveedorController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/buscar")
+    public List<ProveedorDTO> searchProveedores(@RequestParam String nombre) {
+        return proveedorService.findByNombreContaining(nombre).stream()
+                .map(mapper::toProveedorDTO)
+                .collect(Collectors.toList());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ProveedorDTO> getProveedorById(@PathVariable Integer id) {
         return proveedorService.findById(id)

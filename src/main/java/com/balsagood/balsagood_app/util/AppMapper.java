@@ -75,11 +75,12 @@ public class AppMapper {
     public OrdenTaller toOrdenTallerEntity(OrdenTallerDTO dto) {
         if (dto == null)
             return null;
-        return new OrdenTaller(
-                dto.getIdOrden(),
-                dto.getOrdenFechaInicio(),
-                dto.getOrdenFechaFin(),
-                dto.getOrdenObservacion());
+        OrdenTaller orden = new OrdenTaller();
+        orden.setIdOrden(dto.getIdOrden());
+        orden.setOrdenFechaInicio(dto.getOrdenFechaInicio());
+        orden.setOrdenFechaFin(dto.getOrdenFechaFin());
+        orden.setOrdenObservacion(dto.getOrdenObservacion());
+        return orden;
     }
 
     // --- Camara ---

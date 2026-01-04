@@ -28,4 +28,8 @@ public class ProveedorService {
     public void deleteById(Integer id) {
         proveedorRepository.deleteById(id);
     }
+
+    public List<Proveedor> findByNombreContaining(String nombre) {
+        return proveedorRepository.findByProvNombreContainingIgnoreCase(nombre);
+    }
 }

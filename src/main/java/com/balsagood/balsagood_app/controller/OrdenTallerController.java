@@ -55,6 +55,34 @@ public class OrdenTallerController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/activa")
+    public ResponseEntity<OrdenTallerDTO> getOrdenActiva() {
+        return ordenTallerService.obtenerOrdenActiva()
+                .map(mapper::toOrdenTallerDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.noContent().build());
+    }
+
+    @PostMapping("/iniciar")
+    public ResponseEntity<OrdenTallerDTO> iniciarOrden() {
+        OrdenTaller orden = ordenTallerService.iniciarOrden();
+        return ResponseEntity.ok(mapper.toOrdenTallerDTO(orden));
+    }
+
+    @PatchMapping("/finalizar")
+    public ResponseEntity<OrdenTallerDTO> finalizarOrden(@RequestParam(required = false) Integer idOrden) {
+        if (idOrden == null) {
+            return ordenTallerService.obtenerOrdenActiva()
+                    .map(active -> {
+                        OrdenTaller finalized = ordenTallerService.finalizarOrden(active.getIdOrden());
+                        return ResponseEntity.ok(mapper.toOrdenTallerDTO(finalized));
+                    })
+                    .orElse(ResponseEntity.notFound().build());
+        }
+        OrdenTaller orden = ordenTallerService.finalizarOrden(idOrden);
+        return ResponseEntity.ok(mapper.toOrdenTallerDTO(orden));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrdenTaller(@PathVariable Integer id) {
         if (ordenTallerService.findById(id).isPresent()) {

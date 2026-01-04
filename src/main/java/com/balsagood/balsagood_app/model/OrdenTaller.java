@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "ordenes_taller")
@@ -19,11 +20,14 @@ public class OrdenTaller {
     private Integer idOrden;
 
     @Column(name = "orden_fecha_inicio", nullable = false)
-    private LocalDate ordenFechaInicio;
+    private LocalDateTime ordenFechaInicio;
 
     @Column(name = "orden_fecha_fin")
-    private LocalDate ordenFechaFin;
+    private LocalDateTime ordenFechaFin;
 
     @Column(name = "orden_observacion", columnDefinition = "TEXT")
     private String ordenObservacion;
+
+    @OneToMany(mappedBy = "ordenTaller")
+    private List<Bloque> bloques;
 }

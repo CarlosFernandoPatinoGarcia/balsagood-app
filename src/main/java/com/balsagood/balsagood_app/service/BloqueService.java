@@ -14,6 +14,9 @@ public class BloqueService {
     @Autowired
     private BloqueRepository bloqueRepository;
 
+    @Autowired
+    private com.balsagood.balsagood_app.repository.OrdenTallerRepository ordenTallerRepository;
+
     public List<Bloque> findAll() {
         return bloqueRepository.findAll();
     }
@@ -23,9 +26,22 @@ public class BloqueService {
     }
 
     public Bloque save(Bloque bloque) {
-        // If state is not set, default to PRESENTADO if creating
-        if (bloque.getIdBloque() == null && bloque.getEstado() == null) {
-            bloque.setEstado("PRESENTADO");
+        // Validation for new blocks
+        if (bloque.getIdBloque() == null) {
+            if (bloque.getEstado() == null) {
+                bloque.setEstado("PRESENTADO");
+            }
+
+            // Assign active OrdenTaller if not present (or validate the one sent)
+            // Strategy: Always fetch active order to ensure consistency.
+            // If the DTO sent an ID, we could validate it matches active, but fetching
+            // active is safer for defining "current context".
+            com.balsagood.balsagood_app.model.OrdenTaller ordenActiva = ordenTallerRepository
+                    .findFirstByOrdenFechaFinIsNull()
+                    .orElseThrow(() -> new RuntimeException(
+                            "No hay una Orden de Taller activa. Inicie una orden antes de registrar bloques."));
+
+            bloque.setOrdenTaller(ordenActiva);
         }
         return bloqueRepository.save(bloque);
     }
