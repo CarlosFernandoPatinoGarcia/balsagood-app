@@ -60,7 +60,7 @@ public class BloqueService {
     }
 
     public List<Bloque> findReadyBlocks() {
-        return bloqueRepository.findByEstado("LISTO");
+        return bloqueRepository.findByEstado("ENCOLADO");
     }
 
     public void deleteById(Integer id) {

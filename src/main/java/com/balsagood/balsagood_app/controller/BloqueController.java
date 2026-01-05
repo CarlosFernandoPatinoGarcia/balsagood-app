@@ -29,7 +29,7 @@ public class BloqueController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/listos")
+    @GetMapping("/encolados")
     public List<BloqueDTO> getReadyBlocks() {
         return bloqueService.findReadyBlocks().stream()
                 .map(mapper::toBloqueDTO)
@@ -60,18 +60,22 @@ public class BloqueController {
 
     @PutMapping("/{id}/encolado")
     public ResponseEntity<BloqueDTO> updateEncolado(@PathVariable Integer id,
-            @RequestBody Map<String, BigDecimal> payload) {
-        BigDecimal pesoConCola = payload.get("bloquePesoConCola");
-        if (pesoConCola == null) {
-            pesoConCola = payload.get("bPesoConCola");
-        }
-        if (pesoConCola == null) {
+            @RequestBody BloqueDTO requestDto) {
+
+        // Extraemos el valor directamente del DTO fuertemente tipado
+        BigDecimal pesoConCola = requestDto.getBloquePesoConCola();
+
+        // Validación simple: Si es nulo o menor/igual a cero
+        if (pesoConCola == null || pesoConCola.compareTo(BigDecimal.ZERO) <= 0) {
+            System.out.println("Error: Recibido peso nulo o inválido para ID: " + id);
             return ResponseEntity.badRequest().build();
         }
+
         try {
             Bloque updated = bloqueService.updateEncolado(id, pesoConCola);
             return ResponseEntity.ok(mapper.toBloqueDTO(updated));
         } catch (RuntimeException e) {
+            e.printStackTrace(); // Para ver el error en consola si ocurre
             return ResponseEntity.notFound().build();
         }
     }

@@ -54,7 +54,7 @@ public class CuerpoService {
                 throw new RuntimeException("El bloque " + bloque.getBloqueCodigo() + " ya pertenece a un cuerpo.");
             }
             bloque.setCuerpo(cuerpo);
-            bloque.setEstado("EN CUERPO"); // O "DESPACHO" según tu flujo
+            bloque.setEstado("EXPORTADO"); // O "DESPACHO" según tu flujo
             bloqueRepository.save(bloque);
         }
 
