@@ -61,7 +61,10 @@ public class BloqueController {
     @PutMapping("/{id}/encolado")
     public ResponseEntity<BloqueDTO> updateEncolado(@PathVariable Integer id,
             @RequestBody Map<String, BigDecimal> payload) {
-        BigDecimal pesoConCola = payload.get("bPesoConCola");
+        BigDecimal pesoConCola = payload.get("bloquePesoConCola");
+        if (pesoConCola == null) {
+            pesoConCola = payload.get("bPesoConCola");
+        }
         if (pesoConCola == null) {
             return ResponseEntity.badRequest().build();
         }
