@@ -12,12 +12,14 @@ public class BloqueDTO {
     private Integer idBloque;
     private OrdenTallerDTO ordenTaller;
     private CuerpoDTO cuerpo;
-    private BigDecimal bLargo;
-    private BigDecimal bAncho;
-    private BigDecimal bAlto;
-    private BigDecimal bBftFinal;
-    private BigDecimal bPesoSinCola;
-    private BigDecimal bPesoConCola;
-    private Long bCodigo;
+    private BigDecimal bloqueLargo;
+    private BigDecimal bloqueAncho;
+    private BigDecimal bloqueAlto;
+    private BigDecimal bloqueBftFinal;
+    private BigDecimal bloquePesoSinCola;
+    private BigDecimal bloquePesoConCola;
+
+    private Long bloqueCodigo;
+
     private String estado;
 }

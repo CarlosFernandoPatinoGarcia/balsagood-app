@@ -23,29 +23,29 @@ public class Bloque {
     private OrdenTaller ordenTaller;
 
     @ManyToOne
-    @JoinColumn(name = "id_cuerpo", nullable = false)
+    @JoinColumn(name = "id_cuerpo", nullable = true)
     private Cuerpo cuerpo;
 
-    @Column(name = "b_largo", nullable = true, precision = 10, scale = 4)
-    private BigDecimal bLargo;
+    @Column(name = "b_largo", nullable = false, precision = 10, scale = 4)
+    private BigDecimal bloqueLargo;
 
     @Column(name = "b_ancho", nullable = true, precision = 10, scale = 4)
-    private BigDecimal bAncho;
+    private BigDecimal bloqueAncho;
 
     @Column(name = "b_alto", nullable = true, precision = 10, scale = 4)
-    private BigDecimal bAlto;
+    private BigDecimal bloqueAlto;
 
     @Column(name = "b_bft_final", nullable = true, precision = 12, scale = 4)
-    private BigDecimal bBftFinal;
+    private BigDecimal bloqueBftFinal;
 
     @Column(name = "b_peso_sin_cola", nullable = false, precision = 10, scale = 4)
-    private BigDecimal bPesoSinCola;
+    private BigDecimal bloquePesoSinCola;
 
     @Column(name = "b_peso_con_cola", precision = 10, scale = 4)
-    private BigDecimal bPesoConCola;
+    private BigDecimal bloquePesoConCola;
 
-    @Column(name = "b_codigo", insertable = false, updatable = false)
-    private Long bCodigo;
+    @Column(name = "b_codigo", nullable = false, precision = 10, scale = 4)
+    private Long bloqueCodigo;
 
     @Column(name = "b_estado", length = 50)
     private String estado;

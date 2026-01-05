@@ -2,6 +2,9 @@ package com.balsagood.balsagood_app.util;
 
 import com.balsagood.balsagood_app.dto.*;
 import com.balsagood.balsagood_app.model.*;
+
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -65,11 +68,37 @@ public class AppMapper {
     public OrdenTallerDTO toOrdenTallerDTO(OrdenTaller orden) {
         if (orden == null)
             return null;
-        return new OrdenTallerDTO(
+
+        OrdenTallerDTO dto = new OrdenTallerDTO(
                 orden.getIdOrden(),
                 orden.getOrdenFechaInicio(),
                 orden.getOrdenFechaFin(),
-                orden.getOrdenObservacion());
+                orden.getOrdenObservacion(),
+                null);
+
+        // Mapear los bloques hijos si existen
+        if (orden.getBloques() != null) {
+            java.util.List<BloqueDTO> bloquesDTO = orden.getBloques().stream()
+                    .map(bloque -> {
+                        return new BloqueDTO(
+                                bloque.getIdBloque(),
+                                null, // Romper ciclo: no mapear la orden de vuelta
+                                toCuerpoDTO(bloque.getCuerpo()),
+                                bloque.getBloqueLargo(),
+                                bloque.getBloqueAncho(),
+                                bloque.getBloqueAlto(),
+                                bloque.getBloqueBftFinal(),
+                                bloque.getBloquePesoSinCola(),
+                                bloque.getBloquePesoConCola(),
+                                bloque.getBloqueCodigo(),
+                                bloque.getEstado());
+                    })
+                    .collect(Collectors.toList());
+
+            dto.setBloques(bloquesDTO);
+        }
+
+        return dto;
     }
 
     public OrdenTaller toOrdenTallerEntity(OrdenTallerDTO dto) {
@@ -163,17 +192,24 @@ public class AppMapper {
     public BloqueDTO toBloqueDTO(Bloque bloque) {
         if (bloque == null)
             return null;
+
+        OrdenTallerDTO ordenDto = toOrdenTallerDTO(bloque.getOrdenTaller());
+
+        if (ordenDto != null) {
+            ordenDto.setBloques(null);
+        }
+
         return new BloqueDTO(
                 bloque.getIdBloque(),
-                toOrdenTallerDTO(bloque.getOrdenTaller()),
+                ordenDto,
                 toCuerpoDTO(bloque.getCuerpo()),
-                bloque.getBLargo(),
-                bloque.getBAncho(),
-                bloque.getBAlto(),
-                bloque.getBBftFinal(),
-                bloque.getBPesoSinCola(),
-                bloque.getBPesoConCola(),
-                bloque.getBCodigo(),
+                bloque.getBloqueLargo(),
+                bloque.getBloqueAncho(),
+                bloque.getBloqueAlto(),
+                bloque.getBloqueBftFinal(),
+                bloque.getBloquePesoSinCola(),
+                bloque.getBloquePesoConCola(),
+                bloque.getBloqueCodigo(),
                 bloque.getEstado());
     }
 
@@ -184,12 +220,13 @@ public class AppMapper {
         bloque.setIdBloque(dto.getIdBloque());
         bloque.setOrdenTaller(toOrdenTallerEntity(dto.getOrdenTaller()));
         bloque.setCuerpo(toCuerpoEntity(dto.getCuerpo()));
-        bloque.setBLargo(dto.getBLargo());
-        bloque.setBAncho(dto.getBAncho());
-        bloque.setBAlto(dto.getBAlto());
-        bloque.setBBftFinal(dto.getBBftFinal());
-        bloque.setBPesoSinCola(dto.getBPesoSinCola());
-        bloque.setBPesoConCola(dto.getBPesoConCola());
+        bloque.setBloqueLargo(dto.getBloqueLargo());
+        bloque.setBloqueAncho(dto.getBloqueAncho());
+        bloque.setBloqueAlto(dto.getBloqueAlto());
+        bloque.setBloqueBftFinal(dto.getBloqueBftFinal());
+        bloque.setBloquePesoSinCola(dto.getBloquePesoSinCola());
+        bloque.setBloquePesoConCola(dto.getBloquePesoConCola());
+        bloque.setBloqueCodigo(dto.getBloqueCodigo());
         bloque.setEstado(dto.getEstado());
         return bloque;
     }

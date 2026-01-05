@@ -53,7 +53,7 @@ public class BloqueService {
 
     public Bloque updateEncolado(Integer id, BigDecimal pesoConCola) {
         return bloqueRepository.findById(id).map(bloque -> {
-            bloque.setBPesoConCola(pesoConCola);
+            bloque.setBloquePesoConCola(pesoConCola);
             bloque.setEstado("ENCOLADO");
             return bloqueRepository.save(bloque);
         }).orElseThrow(() -> new RuntimeException("Bloque no encontrado"));
