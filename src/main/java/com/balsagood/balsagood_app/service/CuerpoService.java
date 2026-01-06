@@ -9,6 +9,8 @@ import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,11 +40,13 @@ public class CuerpoService {
     }
 
     @Transactional // Importante para consistencia
-    public Cuerpo agruparBloques(List<Integer> idsBloques, String observacion) {
+    public Cuerpo agruparBloques(List<Integer> idsBloques, BigDecimal cuerpoLargoFinal, String observacion) {
         // 1. Crear el Cuerpo (Cabecera)
         Cuerpo cuerpo = new Cuerpo();
         cuerpo.setCuerpoObservacion(observacion);
-        // Puedes calcular el ancho total aquí sumando los bloques si quieres guardarlo
+        // Puedes calcular el largo total aquí sumando los bloques si quieres guardarlo
+        cuerpo.setCuerpoLargoFinal(cuerpoLargoFinal);
+
         cuerpo = cuerpoRepository.save(cuerpo);
 
         // 2. Buscar y Actualizar los Bloques (Hijos)
@@ -54,7 +58,7 @@ public class CuerpoService {
                 throw new RuntimeException("El bloque " + bloque.getBloqueCodigo() + " ya pertenece a un cuerpo.");
             }
             bloque.setCuerpo(cuerpo);
-            bloque.setEstado("EXPORTADO"); // O "DESPACHO" según tu flujo
+            bloque.setEstado("EXPORTADO");
             bloqueRepository.save(bloque);
         }
 

@@ -1,7 +1,6 @@
 package com.balsagood.balsagood_app.controller;
 
 import com.balsagood.balsagood_app.dto.CuerpoDTO;
-import com.balsagood.balsagood_app.dto.AgrupacionRequest;
 import com.balsagood.balsagood_app.model.Cuerpo;
 import com.balsagood.balsagood_app.service.CuerpoService;
 import com.balsagood.balsagood_app.util.AppMapper;
@@ -57,9 +56,10 @@ public class CuerpoController {
 
     @PostMapping("/agrupar")
     public ResponseEntity<CuerpoDTO> agruparBloques(
-            @RequestBody AgrupacionRequest request) {
+            @RequestBody CuerpoDTO request) {
         try {
-            Cuerpo cuerpo = cuerpoService.agruparBloques(request.getIdsBloques(), request.getObservacion());
+            Cuerpo cuerpo = cuerpoService.agruparBloques(request.getIdsBloques(), request.getLargoFinal(),
+                    request.getObservacion());
             return ResponseEntity.ok(mapper.toCuerpoDTO(cuerpo));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();

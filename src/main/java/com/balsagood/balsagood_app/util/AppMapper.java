@@ -46,12 +46,14 @@ public class AppMapper {
     }
 
     // --- Cuerpo ---
+    // --- Cuerpo ---
     public CuerpoDTO toCuerpoDTO(Cuerpo cuerpo) {
         if (cuerpo == null)
             return null;
         return new CuerpoDTO(
                 cuerpo.getIdCuerpo(),
-                cuerpo.getCuerpoAnchoFinal(),
+                null, // idsBloques no se mapean desde el cuerpo base (se llenarían si es necesario)
+                cuerpo.getCuerpoLargoFinal(),
                 cuerpo.getCuerpoObservacion());
     }
 
@@ -60,8 +62,8 @@ public class AppMapper {
             return null;
         return new Cuerpo(
                 dto.getIdCuerpo(),
-                dto.getCuerpoAnchoFinal(),
-                dto.getCuerpoObservacion());
+                dto.getLargoFinal(),
+                dto.getObservacion());
     }
 
     // --- OrdenTaller ---
