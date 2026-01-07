@@ -111,20 +111,10 @@ public class PalletVerdeService {
                 if (Boolean.TRUE.equals(esCastigada)) {
                     BigDecimal largoOriginal = cal.getLargoOriginal() != null ? cal.getLargoOriginal() : largo;
 
-                    bftItemRecibido = largoOriginal.multiply(new BigDecimal("81"))
-                            .multiply(espesor)
-                            .multiply(cantidadVal)
-                            .divide(new BigDecimal("12"), 4, RoundingMode.HALF_UP);
-
-                    bftItemAceptado = largo.multiply(new BigDecimal("81"))
-                            .multiply(espesor)
-                            .multiply(cantidadVal)
-                            .divide(new BigDecimal("12"), 4, RoundingMode.HALF_UP);
+                    bftItemRecibido = calculateBft(largoOriginal, espesor, cantidadVal);
+                    bftItemAceptado = calculateBft(largo, espesor, cantidadVal);
                 } else {
-                    BigDecimal bftItem = largo.multiply(new BigDecimal("81"))
-                            .multiply(espesor)
-                            .multiply(cantidadVal)
-                            .divide(new BigDecimal("12"), 4, RoundingMode.HALF_UP);
+                    BigDecimal bftItem = calculateBft(largo, espesor, cantidadVal);
                     bftItemRecibido = bftItem;
                     bftItemAceptado = bftItem;
                 }
@@ -140,8 +130,8 @@ public class PalletVerdeService {
             pallet.setItems(items);
         }
 
-        pallet.setBftVerdeRecibido(totalBftRecibido);
-        pallet.setBftVerdeAceptado(totalBftAceptado);
+        pallet.setBftVerdeRecibido(round(totalBftRecibido));
+        pallet.setBftVerdeAceptado(round(totalBftAceptado));
 
         pallet.setPalletEstado("MADERA VERDE");
 
@@ -176,8 +166,8 @@ public class PalletVerdeService {
             }
         }
 
-        pallet.setBftVerdeRecibido(totalRecibido);
-        pallet.setBftVerdeAceptado(totalAceptado);
+        pallet.setBftVerdeRecibido(round(totalRecibido));
+        pallet.setBftVerdeAceptado(round(totalAceptado));
 
         // Guardamos el padre con los nuevos totales
         palletVerdeRepository.save(pallet);
@@ -191,6 +181,23 @@ public class PalletVerdeService {
         pallet.getItems().remove(item); // Actualizas la lista en memoria (importante para el cálculo)
 
         recalcularTotalesPallet(pallet); // Recalculas y guardas el padre
+    }
+
+    private BigDecimal calculateBft(BigDecimal largo, BigDecimal espesor, BigDecimal cantidad) {
+        if (largo == null || espesor == null || cantidad == null) {
+            return BigDecimal.ZERO;
+        }
+        return largo.multiply(new BigDecimal("81"))
+                .multiply(espesor)
+                .multiply(cantidad)
+                .divide(new BigDecimal("12"), 4, RoundingMode.HALF_UP);
+    }
+
+    private BigDecimal round(BigDecimal value) {
+        if (value == null) {
+            return BigDecimal.ZERO;
+        }
+        return value.setScale(4, RoundingMode.HALF_UP);
     }
 
 }
