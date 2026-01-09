@@ -45,6 +45,23 @@ public class AppMapper {
         return recepcion;
     }
 
+    // --- TipoMadera ---
+    public TipoMaderaDTO toTipoMaderaDTO(TipoMadera tipoMadera) {
+        if (tipoMadera == null)
+            return null;
+        return new TipoMaderaDTO(
+                tipoMadera.getIdTipoMadera(),
+                tipoMadera.getTipoDescripcion());
+    }
+
+    public TipoMadera toTipoMaderaEntity(TipoMaderaDTO dto) {
+        if (dto == null)
+            return null;
+        return new TipoMadera(
+                dto.getIdTipoMadera(),
+                dto.getTipoDescripcion());
+    }
+
     // --- Cuerpo ---
     // --- Cuerpo ---
     public CuerpoDTO toCuerpoDTO(Cuerpo cuerpo) {
@@ -84,6 +101,7 @@ public class AppMapper {
                     .map(bloque -> {
                         return new BloqueDTO(
                                 bloque.getIdBloque(),
+                                toTipoMaderaDTO(bloque.getTipoMadera()),
                                 null, // Romper ciclo: no mapear la orden de vuelta
                                 toCuerpoDTO(bloque.getCuerpo()),
                                 bloque.getBloqueLargo(),
@@ -162,6 +180,7 @@ public class AppMapper {
         return new PalletVerdeDTO(
                 pallet.getIdPallet(),
                 toRecepcionDTO(pallet.getRecepcion()),
+                toTipoMaderaDTO(pallet.getTipoMadera()),
                 pallet.getPalletNumero(),
                 pallet.getPalletEmplantillador(),
                 pallet.getPalletAnchoPlantilla(),
@@ -203,6 +222,7 @@ public class AppMapper {
 
         return new BloqueDTO(
                 bloque.getIdBloque(),
+                toTipoMaderaDTO(bloque.getTipoMadera()),
                 ordenDto,
                 toCuerpoDTO(bloque.getCuerpo()),
                 bloque.getBloqueLargo(),
@@ -220,6 +240,7 @@ public class AppMapper {
             return null;
         Bloque bloque = new Bloque();
         bloque.setIdBloque(dto.getIdBloque());
+        bloque.setTipoMadera(toTipoMaderaEntity(dto.getTipoMadera()));
         bloque.setOrdenTaller(toOrdenTallerEntity(dto.getOrdenTaller()));
         bloque.setCuerpo(toCuerpoEntity(dto.getCuerpo()));
         bloque.setBloqueLargo(dto.getBloqueLargo());

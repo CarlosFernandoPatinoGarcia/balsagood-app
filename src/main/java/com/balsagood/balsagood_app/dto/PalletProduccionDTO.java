@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PalletProduccionDTO {
     private Integer idPallet;
+    private String tipoMadera;
     private Integer numViaje;
     private Integer palletNumero;
     private String codigo; // "numViaje-palletNumero"

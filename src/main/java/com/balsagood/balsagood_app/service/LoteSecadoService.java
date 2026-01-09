@@ -1,16 +1,22 @@
 package com.balsagood.balsagood_app.service;
 
+import com.balsagood.balsagood_app.dto.LoteDespachoDTO;
+import com.balsagood.balsagood_app.dto.LoteSecadoDTO;
+import com.balsagood.balsagood_app.dto.PalletResumenDTO;
 import com.balsagood.balsagood_app.model.DetalleSecado;
 import com.balsagood.balsagood_app.model.LoteSecado;
 import com.balsagood.balsagood_app.model.PalletVerde;
 import com.balsagood.balsagood_app.repository.DetalleSecadoRepository;
 import com.balsagood.balsagood_app.repository.LoteSecadoRepository;
 import com.balsagood.balsagood_app.repository.PalletVerdeRepository;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LoteSecadoService {
@@ -56,21 +62,21 @@ public class LoteSecadoService {
         loteSecadoRepository.deleteById(id);
     }
 
-    public com.balsagood.balsagood_app.dto.LoteDespachoDTO obtenerDatosDespacho(Integer idLote) {
+    public LoteDespachoDTO obtenerDatosDespacho(Integer idLote) {
         LoteSecado lote = loteSecadoRepository.findById(idLote)
                 .orElseThrow(() -> new RuntimeException("Lote no encontrado"));
 
         List<DetalleSecado> detalles = detalleSecadoRepository.findByLoteSecado_IdLote(idLote);
 
         // Map base DTO
-        com.balsagood.balsagood_app.dto.LoteSecadoDTO baseDto = appMapper.toLoteSecadoDTO(lote);
+        LoteSecadoDTO baseDto = appMapper.toLoteSecadoDTO(lote);
 
         // Create Despacho DTO
-        com.balsagood.balsagood_app.dto.LoteDespachoDTO despachoDTO = new com.balsagood.balsagood_app.dto.LoteDespachoDTO();
-        org.springframework.beans.BeanUtils.copyProperties(baseDto, despachoDTO);
+        LoteDespachoDTO despachoDTO = new LoteDespachoDTO();
+        BeanUtils.copyProperties(baseDto, despachoDTO);
 
         // Map Pallets
-        java.util.List<com.balsagood.balsagood_app.dto.PalletResumenDTO> palletsDTO = detalles.stream()
+        List<PalletResumenDTO> palletsDTO = detalles.stream()
                 .map(d -> {
                     PalletVerde p = d.getPalletVerde();
                     BigDecimal bft = p.getBftVerdeSeco() != null ? p.getBftVerdeSeco() : p.getBftVerdeAceptado();
@@ -79,11 +85,13 @@ public class LoteSecadoService {
                             : "N/A";
                     String numViaje = (p.getRecepcion() != null) ? String.valueOf(p.getRecepcion().getNumViaje()) : "?";
                     String codigo = "Pallet #" + p.getPalletNumero() + " - Viaje #" + numViaje;
+                    String tipoMaderaDescripcion = p.getTipoMadera().getTipoDescripcion();
 
-                    return new com.balsagood.balsagood_app.dto.PalletResumenDTO(p.getIdPallet(), codigo, proveedorName,
+                    return new PalletResumenDTO(p.getIdPallet(), tipoMaderaDescripcion,
+                            codigo, proveedorName,
                             bft);
                 })
-                .collect(java.util.stream.Collectors.toList());
+                .collect(Collectors.toList());
 
         despachoDTO.setPallets(palletsDTO);
         return despachoDTO;

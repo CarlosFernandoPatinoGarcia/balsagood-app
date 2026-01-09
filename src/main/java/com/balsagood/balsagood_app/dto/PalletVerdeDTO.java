@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 public class PalletVerdeDTO {
     private Integer idPallet;
     private RecepcionDTO recepcion;
+    private TipoMaderaDTO tipoMadera;
     private Integer palletNumero;
     private String palletEmplantillador;
     private BigDecimal palletAnchoPlantilla;

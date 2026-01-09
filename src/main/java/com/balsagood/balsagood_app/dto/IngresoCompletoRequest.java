@@ -67,4 +67,7 @@ public class IngresoCompletoRequest {
         @JsonProperty("largo_original")
         private BigDecimal largoOriginal;
     }
+
+    @JsonProperty("id_tipo_madera")
+    private Integer idTipoMadera;
 }

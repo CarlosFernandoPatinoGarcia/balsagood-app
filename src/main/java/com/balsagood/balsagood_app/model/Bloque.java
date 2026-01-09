@@ -26,6 +26,10 @@ public class Bloque {
     @JoinColumn(name = "id_cuerpo", nullable = true)
     private Cuerpo cuerpo;
 
+    @ManyToOne
+    @JoinColumn(name = "id_tipo_madera", nullable = false)
+    private TipoMadera tipoMadera;
+
     @Column(name = "b_largo", nullable = false, precision = 10, scale = 4)
     private BigDecimal bloqueLargo;
 

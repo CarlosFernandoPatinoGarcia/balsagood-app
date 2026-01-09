@@ -1,12 +1,17 @@
 package com.balsagood.balsagood_app.service;
 
+import com.balsagood.balsagood_app.dto.IngresoCompletoRequest;
+import com.balsagood.balsagood_app.dto.IngresoCompletoRequest.DetalleCalificacion;
 import com.balsagood.balsagood_app.model.ItemPallet;
 import com.balsagood.balsagood_app.model.PalletVerde;
+import com.balsagood.balsagood_app.model.Proveedor;
+import com.balsagood.balsagood_app.model.TipoMadera;
 import com.balsagood.balsagood_app.repository.PalletVerdeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +30,9 @@ public class PalletVerdeService {
     @Autowired
     private com.balsagood.balsagood_app.repository.ItemPalletRepository itemPalletRepository;
 
+    @Autowired
+    private com.balsagood.balsagood_app.repository.TipoMaderaRepository tipoMaderaRepository;
+
     public List<PalletVerde> findAll() {
         return palletVerdeRepository.findAll();
     }
@@ -42,9 +50,9 @@ public class PalletVerdeService {
     }
 
     @org.springframework.transaction.annotation.Transactional
-    public void procesarIngresoCompleto(com.balsagood.balsagood_app.dto.IngresoCompletoRequest request) {
+    public void procesarIngresoCompleto(IngresoCompletoRequest request) {
         // 1. Gestión de Proveedor
-        com.balsagood.balsagood_app.model.Proveedor proveedor = null;
+        Proveedor proveedor = null;
 
         if (request.getIdProveedor() != null) {
             proveedor = proveedorRepository.findById(request.getIdProveedor())
@@ -55,7 +63,7 @@ public class PalletVerdeService {
             proveedor = proveedorRepository
                     .findByProvNombre(request.getProvNombre())
                     .orElseGet(() -> {
-                        com.balsagood.balsagood_app.model.Proveedor newProv = new com.balsagood.balsagood_app.model.Proveedor();
+                        Proveedor newProv = new Proveedor();
                         newProv.setProvNombre(request.getProvNombre());
                         return proveedorRepository.save(newProv);
                     });
@@ -75,6 +83,15 @@ public class PalletVerdeService {
         pallet.setPalletNumero(request.getPalletNumero());
         pallet.setPalletEmplantillador(request.getPalletEmplantillador());
 
+        // Validate and assign TipoMadera
+        if (request.getIdTipoMadera() == null) {
+            throw new IllegalArgumentException("El tipo de madera es obligatorio");
+        }
+        TipoMadera tipoMadera = tipoMaderaRepository.findById(request.getIdTipoMadera())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Tipo de madera no encontrado con ID: " + request.getIdTipoMadera()));
+        pallet.setTipoMadera(tipoMadera);
+
         com.balsagood.balsagood_app.dto.IngresoCompletoRequest.Dimensiones dims = request.getDimensiones();
         // Fix Width to 81
         pallet.setPalletAnchoPlantilla(new BigDecimal("81"));
@@ -86,11 +103,11 @@ public class PalletVerdeService {
         BigDecimal totalBftAceptado = BigDecimal.ZERO;
 
         if (request.getCalificaciones() != null) {
-            java.util.List<com.balsagood.balsagood_app.model.ItemPallet> items = new java.util.ArrayList<>();
+            List<ItemPallet> items = new ArrayList<>();
 
-            for (com.balsagood.balsagood_app.dto.IngresoCompletoRequest.DetalleCalificacion cal : request
+            for (DetalleCalificacion cal : request
                     .getCalificaciones()) {
-                com.balsagood.balsagood_app.model.ItemPallet item = new com.balsagood.balsagood_app.model.ItemPallet();
+                ItemPallet item = new ItemPallet();
                 item.setPalletVerde(pallet);
 
                 BigDecimal largo = cal.getLargo() != null ? cal.getLargo() : BigDecimal.ZERO;
@@ -136,11 +153,7 @@ public class PalletVerdeService {
         pallet.setPalletEstado("MADERA VERDE");
 
         pallet = palletVerdeRepository.save(pallet);
-
-        // Removed CalificacionPallet saving loop as requested.
     }
-
-    // En PalletVerdeService.java
 
     private void recalcularTotalesPallet(PalletVerde pallet) {
         if (pallet.getItems() == null || pallet.getItems().isEmpty()) {

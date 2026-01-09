@@ -1,7 +1,12 @@
 package com.balsagood.balsagood_app.service;
 
 import com.balsagood.balsagood_app.model.Bloque;
+import com.balsagood.balsagood_app.model.OrdenTaller;
+import com.balsagood.balsagood_app.model.TipoMadera;
 import com.balsagood.balsagood_app.repository.BloqueRepository;
+import com.balsagood.balsagood_app.repository.OrdenTallerRepository;
+import com.balsagood.balsagood_app.repository.TipoMaderaRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
@@ -15,7 +20,10 @@ public class BloqueService {
     private BloqueRepository bloqueRepository;
 
     @Autowired
-    private com.balsagood.balsagood_app.repository.OrdenTallerRepository ordenTallerRepository;
+    private OrdenTallerRepository ordenTallerRepository;
+
+    @Autowired
+    private TipoMaderaRepository tipoMaderaRepository;
 
     public List<Bloque> findAll() {
         return bloqueRepository.findAll();
@@ -36,12 +44,23 @@ public class BloqueService {
             // Strategy: Always fetch active order to ensure consistency.
             // If the DTO sent an ID, we could validate it matches active, but fetching
             // active is safer for defining "current context".
-            com.balsagood.balsagood_app.model.OrdenTaller ordenActiva = ordenTallerRepository
+            OrdenTaller ordenActiva = ordenTallerRepository
                     .findFirstByOrdenFechaFinIsNull()
-                    .orElseThrow(() -> new RuntimeException(
+                    .orElseThrow(() -> new IllegalArgumentException(
                             "No hay una Orden de Taller activa. Inicie una orden antes de registrar bloques."));
 
             bloque.setOrdenTaller(ordenActiva);
+        }
+
+        // Validate and assign TipoMadera if present (to ensure it is managed)
+        if (bloque.getTipoMadera() != null && bloque.getTipoMadera().getIdTipoMadera() != null) {
+            TipoMadera tipoMadera = tipoMaderaRepository.findById(bloque.getTipoMadera().getIdTipoMadera())
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Tipo de madera no encontrado con ID: " + bloque.getTipoMadera().getIdTipoMadera()));
+            bloque.setTipoMadera(tipoMadera);
+        } else if (bloque.getTipoMadera() == null) {
+            // Optional: throw exception if TipoMadera is mandatory
+            throw new IllegalArgumentException("El tipo de madera es obligatorio para registrar un bloque.");
         }
         return bloqueRepository.save(bloque);
     }
@@ -56,7 +75,7 @@ public class BloqueService {
             bloque.setBloquePesoConCola(pesoConCola);
             bloque.setEstado("ENCOLADO");
             return bloqueRepository.save(bloque);
-        }).orElseThrow(() -> new RuntimeException("Bloque no encontrado"));
+        }).orElseThrow(() -> new IllegalArgumentException("Bloque no encontrado"));
     }
 
     public List<Bloque> findReadyBlocks() {

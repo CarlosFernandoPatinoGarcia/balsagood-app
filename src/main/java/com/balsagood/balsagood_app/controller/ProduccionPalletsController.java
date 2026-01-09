@@ -28,9 +28,11 @@ public class ProduccionPalletsController {
             String codigo = (numViaje != null && numPallet != null)
                     ? numViaje + "-" + numPallet
                     : "N/A";
+            String tipoMaderaDescripcion = pallet.getTipoMadera().getTipoDescripcion();
 
             return new PalletProduccionDTO(
                     pallet.getIdPallet(),
+                    tipoMaderaDescripcion,
                     numViaje,
                     numPallet,
                     codigo);

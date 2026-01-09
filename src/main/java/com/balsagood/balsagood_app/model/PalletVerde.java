@@ -22,6 +22,10 @@ public class PalletVerde {
     @JoinColumn(name = "id_recepcion", nullable = false)
     private Recepcion recepcion;
 
+    @ManyToOne
+    @JoinColumn(name = "id_tipo_madera", nullable = false)
+    private TipoMadera tipoMadera;
+
     @Column(name = "pallet_numero", nullable = false)
     private Integer palletNumero;
 

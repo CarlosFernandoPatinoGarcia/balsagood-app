@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class BloqueDTO {
     private Integer idBloque;
+    private TipoMaderaDTO tipoMadera;
     private OrdenTallerDTO ordenTaller;
     private CuerpoDTO cuerpo;
     private BigDecimal bloqueLargo;
