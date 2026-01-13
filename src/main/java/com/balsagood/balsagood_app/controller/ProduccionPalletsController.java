@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/produccion-pallets")
-@CrossOrigin(origins = "*")
+@CrossOrigin(originPatterns = "*")
 public class ProduccionPalletsController {
 
     @Autowired

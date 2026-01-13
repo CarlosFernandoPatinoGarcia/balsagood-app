@@ -30,7 +30,7 @@ public class GestionSecadoService {
 
     // 1. Filtrado de Pallets Disponibles
     public List<PalletVerde> getPalletsDisponibles() {
-        return palletVerdeRepository.findByPalletEstadoAndBftVerdeAceptadoIsNotNull("MADERA VERDE");
+        return palletVerdeRepository.findByPalletEstadoAndBftVerdeAceptadoIsNotNull("MV");
     }
 
     // 2. Creación de Lotes
@@ -48,7 +48,7 @@ public class GestionSecadoService {
 
         BigDecimal volumenTotal = BigDecimal.ZERO;
         for (PalletVerde pallet : palletsSeleccionados) {
-            if (!"MADERA VERDE".equals(pallet.getPalletEstado())) {
+            if (!"MV".equals(pallet.getPalletEstado())) {
                 throw new RuntimeException("El pallet " + pallet.getPalletNumero() + " no está en estado MADERA VERDE");
             }
             volumenTotal = volumenTotal.add(pallet.getBftVerdeAceptado());
@@ -84,7 +84,7 @@ public class GestionSecadoService {
             detalle.setPalletVerde(pallet);
             detalleSecadoRepository.save(detalle);
 
-            pallet.setPalletEstado("EN SECADO");
+            pallet.setPalletEstado("SE");
             palletVerdeRepository.save(pallet);
         }
 
@@ -95,12 +95,12 @@ public class GestionSecadoService {
     public String getEstadoLote(LoteSecado lote) {
         LocalDateTime now = LocalDateTime.now();
         if (lote.getLoteFechaFin() != null && now.isAfter(lote.getLoteFechaFin())) {
-            return "LISTO PARA BFT";
+            return "OK";
         } else if (now.isAfter(lote.getLoteFechaInicio())
                 && (lote.getLoteFechaFin() == null || now.isBefore(lote.getLoteFechaFin()))) {
-            return "SECANDO";
+            return "SE";
         }
-        return "PROGRAMADO"; // Estado por defecto si no ha iniciado
+        return "DF"; // Estado "DEFAULT" si no ha iniciado
     }
 
     // 4. Finalización de Secado
@@ -129,7 +129,7 @@ public class GestionSecadoService {
             }
 
             // Cambiar estado a STOCK SECO
-            pallet.setPalletEstado("STOCK SECO");
+            pallet.setPalletEstado("SS");
             palletVerdeRepository.save(pallet);
         }
 
@@ -169,7 +169,7 @@ public class GestionSecadoService {
         List<DetalleSecado> detalles = detalleSecadoRepository.findByLoteSecado_IdLote(idLote);
         for (DetalleSecado detalle : detalles) {
             PalletVerde pallet = detalle.getPalletVerde();
-            pallet.setPalletEstado("CONSUMIDO");
+            pallet.setPalletEstado("CO");
             palletVerdeRepository.save(pallet);
         }
 

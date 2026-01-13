@@ -56,7 +56,7 @@ public class PalletVerde {
     @PrePersist
     protected void onCreate() {
         if (palletEstado == null) {
-            palletEstado = "MADERA VERDE";
+            palletEstado = "MV";
         }
     }
 }

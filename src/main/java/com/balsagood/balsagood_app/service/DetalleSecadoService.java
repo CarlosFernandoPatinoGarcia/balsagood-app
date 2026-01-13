@@ -34,7 +34,7 @@ public class DetalleSecadoService {
             PalletVerde pallet = palletVerdeRepository.findById(saved.getPalletVerde().getIdPallet())
                     .orElse(null);
             if (pallet != null) {
-                pallet.setPalletEstado("SECADORA");
+                pallet.setPalletEstado("SE");
                 palletVerdeRepository.save(pallet);
             }
         }

@@ -49,7 +49,7 @@ public class ItemPallet {
     @PrePersist
     protected void onCreate() {
         if (estadoItem == null) {
-            estadoItem = "ACTIVO";
+            estadoItem = "A";
         }
     }
 }

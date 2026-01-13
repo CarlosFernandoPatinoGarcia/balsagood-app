@@ -150,7 +150,7 @@ public class PalletVerdeService {
         pallet.setBftVerdeRecibido(round(totalBftRecibido));
         pallet.setBftVerdeAceptado(round(totalBftAceptado));
 
-        pallet.setPalletEstado("MADERA VERDE");
+        pallet.setPalletEstado("MV");
 
         pallet = palletVerdeRepository.save(pallet);
     }
@@ -167,7 +167,7 @@ public class PalletVerdeService {
 
         for (ItemPallet item : pallet.getItems()) {
             // Ignore deleted items
-            if ("ELIMINADO".equals(item.getEstadoItem())) {
+            if ("E".equals(item.getEstadoItem())) {
                 continue;
             }
 

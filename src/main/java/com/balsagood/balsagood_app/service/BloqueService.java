@@ -37,7 +37,7 @@ public class BloqueService {
         // Validation for new blocks
         if (bloque.getIdBloque() == null) {
             if (bloque.getEstado() == null) {
-                bloque.setEstado("PRESENTADO");
+                bloque.setEstado("PR");
             }
 
             // Assign active OrdenTaller if not present (or validate the one sent)
@@ -66,20 +66,20 @@ public class BloqueService {
     }
 
     public Bloque registerPresentado(Bloque bloque) {
-        bloque.setEstado("PRESENTADO");
+        bloque.setEstado("PR");
         return bloqueRepository.save(bloque);
     }
 
     public Bloque updateEncolado(Integer id, BigDecimal pesoConCola) {
         return bloqueRepository.findById(id).map(bloque -> {
             bloque.setBloquePesoConCola(pesoConCola);
-            bloque.setEstado("ENCOLADO");
+            bloque.setEstado("EN");
             return bloqueRepository.save(bloque);
         }).orElseThrow(() -> new IllegalArgumentException("Bloque no encontrado"));
     }
 
     public List<Bloque> findReadyBlocks() {
-        return bloqueRepository.findByEstado("ENCOLADO");
+        return bloqueRepository.findByEstado("EN");
     }
 
     public void deleteById(Integer id) {

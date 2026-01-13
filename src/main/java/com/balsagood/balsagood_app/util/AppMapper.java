@@ -259,18 +259,18 @@ public class AppMapper {
         if (lote == null)
             return null;
 
-        String estado = "PROGRAMADO";
+        String estado = "DF";
         java.time.LocalDateTime now = java.time.LocalDateTime.now();
 
         if (lote.getFechaDespacho() != null) {
-            estado = "DESPACHADO";
+            estado = "DES";
         } else if (lote.getBftLoteSeco() != null) {
-            estado = "FINALIZADO";
+            estado = "FIN";
         } else if (lote.getLoteFechaFin() != null && now.isAfter(lote.getLoteFechaFin())) {
-            estado = "LISTO PARA BFT";
+            estado = "OK";
         } else if (lote.getLoteFechaInicio() != null && now.isAfter(lote.getLoteFechaInicio())
                 && (lote.getLoteFechaFin() == null || now.isBefore(lote.getLoteFechaFin()))) {
-            estado = "SECANDO";
+            estado = "SE";
         }
 
         return new LoteSecadoDTO(

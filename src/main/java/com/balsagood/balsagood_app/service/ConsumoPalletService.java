@@ -34,7 +34,7 @@ public class ConsumoPalletService {
             PalletVerde pallet = palletVerdeRepository.findById(saved.getPalletVerde().getIdPallet())
                     .orElse(null);
             if (pallet != null) {
-                pallet.setPalletEstado("CONSUMIDO");
+                pallet.setPalletEstado("CO");
                 palletVerdeRepository.save(pallet);
             }
         }

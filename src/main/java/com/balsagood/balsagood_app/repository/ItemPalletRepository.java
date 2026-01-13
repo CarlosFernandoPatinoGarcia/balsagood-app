@@ -14,10 +14,16 @@ public interface ItemPalletRepository extends JpaRepository<ItemPallet, Integer>
     // agrega la busqueda por id
     Optional<ItemPallet> findById(Integer id);
 
-    @Query("SELECT new com.balsagood.balsagood_app.dto.RegistroInventarioPalletsDTO(p.palletEstado, CAST(i.espesor AS double), SUM(i.bftAceptado)) "
-            +
-            "FROM ItemPallet i JOIN i.palletVerde p " +
-            "GROUP BY p.palletEstado, i.espesor")
+    @Query("SELECT new com.balsagood.balsagood_app.dto.RegistroInventarioPalletsDTO(" +
+            "p.palletEstado, " +
+            "tm.tipoDescripcion, " + // 1. Agregamos Tipo Madera
+            "CAST(i.espesor AS double), " +
+            "COALESCE(SUM(i.bftAceptado), 0)) " + // 2. Evitamos Null
+            "FROM ItemPallet i " +
+            "JOIN i.palletVerde p " +
+            "JOIN p.tipoMadera tm " +
+            "WHERE i.estadoItem = 'A' " + // 3. Ignoramos eliminados
+            "GROUP BY p.palletEstado, tm.tipoDescripcion, i.espesor")
     List<RegistroInventarioPalletsDTO> obtenerReportePallets();
 
 }

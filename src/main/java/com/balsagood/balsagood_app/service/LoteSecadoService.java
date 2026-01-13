@@ -50,7 +50,7 @@ public class LoteSecadoService {
             for (DetalleSecado detalle : detalles) {
                 PalletVerde pallet = detalle.getPalletVerde();
                 if (pallet != null) {
-                    pallet.setPalletEstado("STOCK SECO");
+                    pallet.setPalletEstado("SS");
                     palletVerdeRepository.save(pallet);
                 }
             }

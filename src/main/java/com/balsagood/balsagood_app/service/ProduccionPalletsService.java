@@ -14,6 +14,6 @@ public class ProduccionPalletsService {
     private PalletVerdeRepository palletVerdeRepository;
 
     public List<PalletVerde> getPalletsParaProduccion() {
-        return palletVerdeRepository.findByPalletEstado("STOCK SECO");
+        return palletVerdeRepository.findByPalletEstado("SS");
     }
 }
