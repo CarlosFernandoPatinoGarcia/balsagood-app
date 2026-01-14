@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CamaraRepository extends JpaRepository<Camara, Integer> {
+    java.util.List<Camara> findByCamaraEstado(Character camaraEstado);
 }

@@ -13,4 +13,6 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Integer> {
     Optional<Proveedor> findByProvNombre(String provNombre);
 
     List<Proveedor> findByProvNombreContainingIgnoreCase(String provNombre);
+
+    List<Proveedor> findByProvEstado(Character provEstado);
 }

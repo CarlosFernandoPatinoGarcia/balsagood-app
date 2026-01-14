@@ -14,7 +14,7 @@ public class CamaraService {
     private CamaraRepository camaraRepository;
 
     public List<Camara> findAll() {
-        return camaraRepository.findAll();
+        return camaraRepository.findByCamaraEstado('A');
     }
 
     public Optional<Camara> findById(Integer id) {
@@ -32,9 +32,16 @@ public class CamaraService {
         camaraRepository.deleteById(id);
     }
 
+    public void softDelete(Integer id) {
+        camaraRepository.findById(id).ifPresent(camara -> {
+            camara.setCamaraEstado('E');
+            camaraRepository.save(camara);
+        });
+    }
+
     public List<Camara> findAvailable() {
         List<Integer> occupiedIds = loteSecadoRepository.findOccupiedCamaraIds();
-        List<Camara> allCamaras = camaraRepository.findAll();
+        List<Camara> allCamaras = findAll(); // Use filtered findAll
         if (occupiedIds.isEmpty()) {
             return allCamaras;
         }
@@ -47,7 +54,7 @@ public class CamaraService {
     private com.balsagood.balsagood_app.util.AppMapper appMapper;
 
     public List<com.balsagood.balsagood_app.dto.CamaraDTO> getCamarasConDisponibilidad() {
-        return camaraRepository.findAll().stream()
+        return findAll().stream() // Use filtered findAll
                 .map(appMapper::toCamaraDTO)
                 .collect(java.util.stream.Collectors.toList());
     }

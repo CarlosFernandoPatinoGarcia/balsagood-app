@@ -14,7 +14,7 @@ public class ProveedorService {
     private ProveedorRepository proveedorRepository;
 
     public List<Proveedor> findAll() {
-        return proveedorRepository.findAll();
+        return proveedorRepository.findByProvEstado('A');
     }
 
     public Optional<Proveedor> findById(Integer id) {
@@ -27,6 +27,13 @@ public class ProveedorService {
 
     public void deleteById(Integer id) {
         proveedorRepository.deleteById(id);
+    }
+
+    public void softDelete(Integer id) {
+        proveedorRepository.findById(id).ifPresent(proveedor -> {
+            proveedor.setProvEstado('E');
+            proveedorRepository.save(proveedor);
+        });
     }
 
     public List<Proveedor> findByNombreContaining(String nombre) {

@@ -65,7 +65,7 @@ public class ProveedorController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProveedor(@PathVariable Integer id) {
         if (proveedorService.findById(id).isPresent()) {
-            proveedorService.deleteById(id);
+            proveedorService.softDelete(id);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();

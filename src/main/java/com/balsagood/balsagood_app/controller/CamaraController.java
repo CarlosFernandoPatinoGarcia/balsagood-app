@@ -63,7 +63,7 @@ public class CamaraController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCamara(@PathVariable Integer id) {
         if (camaraService.findById(id).isPresent()) {
-            camaraService.deleteById(id);
+            camaraService.softDelete(id);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();

@@ -14,13 +14,13 @@ public class AppMapper {
     public ProveedorDTO toProveedorDTO(Proveedor proveedor) {
         if (proveedor == null)
             return null;
-        return new ProveedorDTO(proveedor.getIdProveedor(), proveedor.getProvNombre());
+        return new ProveedorDTO(proveedor.getIdProveedor(), proveedor.getProvNombre(), proveedor.getProvEstado());
     }
 
     public Proveedor toProveedorEntity(ProveedorDTO dto) {
         if (dto == null)
             return null;
-        return new Proveedor(dto.getIdProveedor(), dto.getProvNombre());
+        return new Proveedor(dto.getIdProveedor(), dto.getProvNombre(), dto.getProvEstado());
     }
 
     // --- Recepcion ---
@@ -140,7 +140,8 @@ public class AppMapper {
                 camara.getIdCamara(),
                 camara.getCamaraDescripcion(),
                 camara.getCamaraCapacidad(),
-                camara.getCapacidadDisponible());
+                camara.getCapacidadDisponible(),
+                camara.getCamaraEstado());
     }
 
     public Camara toCamaraEntity(CamaraDTO dto) {
@@ -150,7 +151,8 @@ public class AppMapper {
                 dto.getIdCamara(),
                 dto.getCamaraDescripcion(),
                 dto.getCamaraCapacidad(),
-                dto.getCapacidadDisponible());
+                dto.getCapacidadDisponible(),
+                dto.getCamaraEstado());
     }
 
     // --- Despacho ---

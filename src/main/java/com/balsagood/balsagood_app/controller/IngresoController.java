@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/ingreso")
-@CrossOrigin(originPatterns = "*") // Adjust mostly for development
+
 public class IngresoController {
 
     @Autowired

@@ -19,4 +19,14 @@ public class Proveedor {
 
     @Column(name = "prov_nombre", nullable = false, length = 150)
     private String provNombre;
+
+    @Column(name = "prov_estado", nullable = false)
+    private Character provEstado;
+
+    @PrePersist
+    protected void onCreate() {
+        if (provEstado == null) {
+            provEstado = 'A';
+        }
+    }
 }

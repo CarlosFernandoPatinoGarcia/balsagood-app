@@ -13,4 +13,5 @@ public class CamaraDTO {
     private String camaraDescripcion;
     private BigDecimal camaraCapacidad;
     private BigDecimal capacidadDisponible;
+    private Character camaraEstado;
 }

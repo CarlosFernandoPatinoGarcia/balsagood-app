@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class ProveedorDTO {
     private Integer idProveedor;
     private String provNombre;
+    private Character provEstado;
 }

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/secado")
-@CrossOrigin(originPatterns = "*")
+
 public class GestionSecadoController {
 
     @Autowired
