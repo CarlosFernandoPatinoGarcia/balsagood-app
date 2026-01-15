@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -15,4 +16,6 @@ public class RegistroInventarioBloquesDTO {
     private Double largo; // 25, 24, 23, 22, 21, 20, 18, 16, 14, 12, 10, 8, 6
     private Long cantidad; // Count
     private BigDecimal totalBft; // Sum of BFT
+    private LocalDateTime fechaInicio;
+    private LocalDateTime fechaFin;
 }
