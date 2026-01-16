@@ -11,4 +11,21 @@ public interface DetalleSecadoRepository extends JpaRepository<DetalleSecado, In
     List<DetalleSecado> findByLoteSecado(LoteSecado loteSecado);
 
     List<DetalleSecado> findByLoteSecado_IdLote(Integer idLote);
+
+    @org.springframework.data.jpa.repository.Query("SELECT new com.balsagood.balsagood_app.dto.DetallePalletsSecosDTO("
+            +
+            "ls.loteCodigo, " +
+            "CONCAT(r.numViaje, ' ', p.palletNumero), " +
+            "ls.loteFechaInicio, " +
+            "ls.loteFechaFin, " +
+            "c.camaraDescripcion, " +
+            "CAST(ls.bftTotalLote AS double), " +
+            "CAST(ls.bftLoteSeco AS double)) " +
+            "FROM DetalleSecado ds " +
+            "JOIN ds.loteSecado ls " +
+            "JOIN ds.palletVerde p " +
+            "JOIN p.recepcion r " +
+            "JOIN ls.camara c " +
+            "WHERE p.palletEstado = 'SE'")
+    List<com.balsagood.balsagood_app.dto.DetallePalletsSecosDTO> obtenerDetallePalletsSecos();
 }

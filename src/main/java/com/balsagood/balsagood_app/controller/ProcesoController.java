@@ -22,4 +22,11 @@ public class ProcesoController {
         List<RecepcionesMaderaVerdeDTO> reporte = procesoService.obtenerReporteRecepciones();
         return ResponseEntity.ok(reporte);
     }
+
+    @GetMapping("/pallets-secos")
+    public ResponseEntity<List<com.balsagood.balsagood_app.dto.DetallePalletsSecosDTO>> obtenerDetallePalletsSecos() {
+        List<com.balsagood.balsagood_app.dto.DetallePalletsSecosDTO> reporte = procesoService
+                .obtenerDetallePalletsSecos();
+        return ResponseEntity.ok(reporte);
+    }
 }
