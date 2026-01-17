@@ -1,5 +1,7 @@
 package com.balsagood.balsagood_app.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,8 +26,8 @@ public class DetallePalletsSecosDTO {
 
     private String loteCodigo; // Codigo del lote
     private String codigoPallet; // Concatenacion del numero de viaje y el numero del pallet
-    private java.time.LocalDateTime loteFechaInicio; // Fecha de ingreso del lote a la camara
-    private java.time.LocalDateTime loteFechaFin; // Fecha de salida del lote de la camara
+    private LocalDateTime loteFechaInicio; // Fecha de ingreso del lote a la camara
+    private LocalDateTime loteFechaFin; // Fecha de salida del lote de la camara
     private String camaraDescripcion; // Descripcion de la camara
     private Double bftTotalLote; // BFT total del lote
     private Double bftLoteSeco; // BFT seco del lote

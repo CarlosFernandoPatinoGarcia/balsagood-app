@@ -70,7 +70,7 @@ public class AppMapper {
         return new CuerpoDTO(
                 cuerpo.getIdCuerpo(),
                 null, // idsBloques no se mapean desde el cuerpo base (se llenarían si es necesario)
-                cuerpo.getCuerpoLargoFinal(),
+                cuerpo.getCuerpoBftFinal(),
                 cuerpo.getCuerpoObservacion());
     }
 
@@ -79,7 +79,7 @@ public class AppMapper {
             return null;
         return new Cuerpo(
                 dto.getIdCuerpo(),
-                dto.getLargoFinal(),
+                dto.getBftFinal(),
                 dto.getObservacion());
     }
 
@@ -162,7 +162,8 @@ public class AppMapper {
         return new DespachoDTO(
                 despacho.getIdDespacho(),
                 despacho.getDespFecha(),
-                despacho.getDespObservacion());
+                despacho.getDespObservacion(),
+                despacho.getDespCodigo());
     }
 
     public Despacho toDespachoEntity(DespachoDTO dto) {
@@ -172,6 +173,7 @@ public class AppMapper {
         despacho.setIdDespacho(dto.getIdDespacho());
         despacho.setDespFecha(dto.getDespFecha());
         despacho.setDespObservacion(dto.getDespObservacion());
+        despacho.setDespCodigo(dto.getDespCodigo());
         return despacho;
     }
 

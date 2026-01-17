@@ -54,17 +54,8 @@ public class CuerpoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/agrupar")
-    public ResponseEntity<CuerpoDTO> agruparBloques(
-            @RequestBody CuerpoDTO request) {
-        try {
-            Cuerpo cuerpo = cuerpoService.agruparBloques(request.getIdsBloques(), request.getLargoFinal(),
-                    request.getObservacion());
-            return ResponseEntity.ok(mapper.toCuerpoDTO(cuerpo));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
+    // Endpoint /agrupar removed as logic is now handled in
+    // DespachoService.registrarDespacho
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCuerpo(@PathVariable Integer id) {

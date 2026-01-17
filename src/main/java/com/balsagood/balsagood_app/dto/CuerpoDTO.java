@@ -12,6 +12,6 @@ import java.util.List;
 public class CuerpoDTO {
     private Integer idCuerpo;
     private List<Integer> idsBloques;
-    private BigDecimal largoFinal;
+    private BigDecimal bftFinal;
     private String observacion;
 }

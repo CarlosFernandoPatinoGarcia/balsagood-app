@@ -18,8 +18,8 @@ public class Cuerpo {
     @Column(name = "id_cuerpo")
     private Integer idCuerpo;
 
-    @Column(name = "cuerpo_largo_final", nullable = false, precision = 10, scale = 4)
-    private BigDecimal cuerpoLargoFinal;
+    @Column(name = "cuerpo_bft_final", nullable = false, precision = 10, scale = 4)
+    private BigDecimal cuerpoBftFinal;
 
     @Column(name = "cuerpo_observacion", columnDefinition = "TEXT")
     private String cuerpoObservacion;

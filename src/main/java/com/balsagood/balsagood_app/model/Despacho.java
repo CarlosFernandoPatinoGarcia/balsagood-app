@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "despachos")
@@ -19,15 +19,18 @@ public class Despacho {
     private Integer idDespacho;
 
     @Column(name = "desp_fecha")
-    private LocalDateTime despFecha;
+    private LocalDate despFecha;
 
     @Column(name = "desp_observacion", columnDefinition = "TEXT")
     private String despObservacion;
 
+    @Column(name = "desp_codigo", nullable = false, length = 50)
+    private String despCodigo;
+
     @PrePersist
     protected void onCreate() {
         if (despFecha == null) {
-            despFecha = LocalDateTime.now();
+            despFecha = LocalDate.now();
         }
     }
 }

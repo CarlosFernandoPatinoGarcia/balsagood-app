@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.balsagood.balsagood_app.dto.DetallePalletsSecosDTO;
+
 import java.util.List;
 
 @RestController
@@ -24,9 +26,16 @@ public class ProcesoController {
     }
 
     @GetMapping("/pallets-secos")
-    public ResponseEntity<List<com.balsagood.balsagood_app.dto.DetallePalletsSecosDTO>> obtenerDetallePalletsSecos() {
-        List<com.balsagood.balsagood_app.dto.DetallePalletsSecosDTO> reporte = procesoService
+    public ResponseEntity<List<DetallePalletsSecosDTO>> obtenerDetallePalletsSecos() {
+        List<DetallePalletsSecosDTO> reporte = procesoService
                 .obtenerDetallePalletsSecos();
+        return ResponseEntity.ok(reporte);
+    }
+
+    @GetMapping("/bloques-despachados")
+    public ResponseEntity<List<com.balsagood.balsagood_app.dto.BloquesDespachadosDTO>> obtenerBloquesDespachados() {
+        List<com.balsagood.balsagood_app.dto.BloquesDespachadosDTO> reporte = procesoService
+                .obtenerBloquesDespachados();
         return ResponseEntity.ok(reporte);
     }
 }

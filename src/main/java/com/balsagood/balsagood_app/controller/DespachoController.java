@@ -42,6 +42,13 @@ public class DespachoController {
         return mapper.toDespachoDTO(saved);
     }
 
+    @PostMapping("/registrar")
+    public ResponseEntity<com.balsagood.balsagood_app.dto.RegistroDespachoDTO> registrarDespacho(
+            @RequestBody com.balsagood.balsagood_app.dto.RegistroDespachoDTO dto) {
+        com.balsagood.balsagood_app.dto.RegistroDespachoDTO saved = despachoService.registrarDespacho(dto);
+        return ResponseEntity.ok(saved);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<DespachoDTO> updateDespacho(@PathVariable Integer id, @RequestBody DespachoDTO dto) {
         return despachoService.findById(id)
