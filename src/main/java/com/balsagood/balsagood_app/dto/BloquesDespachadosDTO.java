@@ -1,5 +1,7 @@
 package com.balsagood.balsagood_app.dto;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +15,7 @@ public class BloquesDespachadosDTO {
      * 
      */
     private String codigoDespacho; // Codigo del despacho
-    private java.time.LocalDate fechaDespacho; // Fecha de despacho o exportacion
+    private LocalDate fechaDespacho; // Fecha de despacho o exportacion
     private Long codigoBloque; // Codigo del bloque
     private Double bloqueLargo; // Largo del bloque
     private Double bloqueAncho; // Ancho del bloque
