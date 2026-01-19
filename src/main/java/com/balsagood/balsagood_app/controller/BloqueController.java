@@ -1,6 +1,7 @@
 package com.balsagood.balsagood_app.controller;
 
 import com.balsagood.balsagood_app.dto.BloqueDTO;
+import com.balsagood.balsagood_app.dto.BloquesProducidosDTO;
 import com.balsagood.balsagood_app.model.Bloque;
 import com.balsagood.balsagood_app.service.BloqueService;
 import com.balsagood.balsagood_app.util.AppMapper;

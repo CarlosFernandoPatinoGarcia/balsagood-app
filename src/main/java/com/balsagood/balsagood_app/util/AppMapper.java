@@ -368,4 +368,50 @@ public class AppMapper {
         return detalle;
     }
 
+    // --- HistorialPalletsSecando ---
+    public HistorialPalletsSecandoDTO toHistorialPalletsSecandoDTO(HistorialPalletsSecando historial) {
+        if (historial == null)
+            return null;
+        return new HistorialPalletsSecandoDTO(
+                historial.getId(),
+                historial.getHistLoteCodigo(),
+                historial.getHistNumViaje(),
+                historial.getHistPalletNumero(),
+                historial.getHistLoteFechaInicio(),
+                historial.getHistLoteFechaFin(),
+                historial.getHistCamaraDescripcion(),
+                historial.getHistBftTotalLote(),
+                historial.getHistBftLoteSeco());
+    }
+
+    public HistorialPalletsSecando toHistorialPalletsSecandoEntity(HistorialPalletsSecandoDTO dto) {
+        if (dto == null)
+            return null;
+        HistorialPalletsSecando historial = new HistorialPalletsSecando();
+        historial.setId(dto.getId());
+        historial.setHistLoteCodigo(dto.getHistLoteCodigo());
+        historial.setHistNumViaje(dto.getHistNumViaje());
+        historial.setHistPalletNumero(dto.getHistPalletNumero());
+        historial.setHistLoteFechaInicio(dto.getHistLoteFechaInicio());
+        historial.setHistLoteFechaFin(dto.getHistLoteFechaFin());
+        historial.setHistCamaraDescripcion(dto.getHistCamaraDescripcion());
+        historial.setHistBftTotalLote(dto.getHistBftTotalLote());
+        historial.setHistBftLoteSeco(dto.getHistBftLoteSeco());
+        return historial;
+    }
+
+    // -- BloquesProducidosDTO --
+    // -- BloquesProducidosDTO --
+    public BloquesProducidosDTO toBloquesProducidosDTO(Bloque bloque) {
+        if (bloque == null)
+            return null;
+        return new BloquesProducidosDTO(
+                bloque.getBloqueCodigo(),
+                bloque.getOrdenTaller() != null ? bloque.getOrdenTaller().getOrdenFechaInicio() : null,
+                bloque.getOrdenTaller() != null ? bloque.getOrdenTaller().getOrdenFechaFin() : null,
+                bloque.getBloqueLargo() != null ? bloque.getBloqueLargo().doubleValue() : null,
+                bloque.getBloquePesoSinCola() != null ? bloque.getBloquePesoSinCola().doubleValue() : null,
+                bloque.getBloquePesoConCola() != null ? bloque.getBloquePesoConCola().doubleValue() : null,
+                bloque.getBloqueBftFinal() != null ? bloque.getBloqueBftFinal().doubleValue() : null);
+    }
 }

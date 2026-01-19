@@ -1,5 +1,6 @@
 package com.balsagood.balsagood_app.repository;
 
+import com.balsagood.balsagood_app.dto.BloquesProducidosDTO;
 import com.balsagood.balsagood_app.dto.RegistroInventarioBloquesDTO;
 import com.balsagood.balsagood_app.model.Bloque;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +11,19 @@ import java.util.List;
 @Repository
 public interface BloqueRepository extends JpaRepository<Bloque, Integer> {
     List<Bloque> findByEstado(String estado);
+
+    @Query(" SELECT new com.balsagood.balsagood_app.dto.BloquesProducidosDTO("
+            + " b.bloqueCodigo, "
+            + " ot.ordenFechaInicio, "
+            + " ot.ordenFechaFin, "
+            + " CAST(b.bloqueLargo AS double), "
+            + " CAST(b.bloquePesoSinCola AS double), "
+            + " CAST(b.bloquePesoConCola AS double), "
+            + " CAST(b.bloqueBftFinal AS double)) "
+            + " FROM Bloque b "
+            + " JOIN b.ordenTaller ot "
+            + " WHERE b.estado <> 'EX' ")
+    List<BloquesProducidosDTO> obtenerBloquesProducidos();
 
     // Agregar fechaInicio y fechaFin de la clase OrdenTaller
 

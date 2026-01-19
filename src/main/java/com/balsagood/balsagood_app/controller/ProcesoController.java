@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.balsagood.balsagood_app.service.BloqueService;
 import com.balsagood.balsagood_app.dto.DetallePalletsSecosDTO;
 
 import java.util.List;
