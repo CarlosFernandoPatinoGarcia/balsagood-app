@@ -12,6 +12,9 @@ import java.util.List;
 public interface BloqueRepository extends JpaRepository<Bloque, Integer> {
         List<Bloque> findByEstado(String estado);
 
+        org.springframework.data.domain.Page<Bloque> findByEstado(String estado,
+                        org.springframework.data.domain.Pageable pageable);
+
         @Query(" SELECT new com.balsagood.balsagood_app.dto.dashboard.BloquesPresentadosDTO("
                         + " b.bloqueCodigo, "
                         + " ot.ordenFechaInicio, "
@@ -42,4 +45,8 @@ public interface BloqueRepository extends JpaRepository<Bloque, Integer> {
                         "FROM Bloque b JOIN b.tipoMadera tm JOIN b.ordenTaller ot " +
                         "GROUP BY b.estado, tm.tipoDescripcion, b.bloqueLargo, ot.ordenFechaInicio, ot.ordenFechaFin")
         List<RegistroInventarioBloquesDTO> obtenerReporteBloques();
+
+        // obtener el ultimo codigo del bloque
+        @Query("SELECT MAX(b.bloqueCodigo) FROM Bloque b")
+        Long obtenerUltimoCodigoBloque();
 }

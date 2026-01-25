@@ -28,6 +28,19 @@ public class BloqueController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/paginated")
+    public org.springframework.http.ResponseEntity<org.springframework.data.domain.Page<BloqueDTO>> getBloquesPaginated(
+            @RequestParam(defaultValue = "EN") String estado,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return org.springframework.http.ResponseEntity.ok(bloqueService.findByEstadoPaginated(estado, page, size));
+    }
+
+    @GetMapping("/ultimo-codigo")
+    public Long obtenerUltimoCodigoBloque() {
+        return bloqueService.obtenerUltimoCodigoBloque();
+    }
+
     @GetMapping("/encolados")
     public List<BloqueDTO> getReadyBlocks() {
         return bloqueService.findReadyBlocks().stream()
@@ -57,6 +70,18 @@ public class BloqueController {
         return mapper.toBloqueDTO(saved);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<BloqueDTO> updateBloque(@PathVariable Integer id, @RequestBody BloqueDTO bloqueDTO) {
+        return bloqueService.findById(id)
+                .map(existingBloque -> {
+                    Bloque bloque = mapper.toBloqueEntity(bloqueDTO);
+                    bloque.setIdBloque(id);
+                    Bloque saved = bloqueService.save(bloque);
+                    return ResponseEntity.ok(mapper.toBloqueDTO(saved));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PutMapping("/{id}/encolado")
     public ResponseEntity<BloqueDTO> updateEncolado(@PathVariable Integer id,
             @RequestBody BloqueDTO requestDto) {
@@ -77,18 +102,6 @@ public class BloqueController {
             e.printStackTrace(); // Para ver el error en consola si ocurre
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<BloqueDTO> updateBloque(@PathVariable Integer id, @RequestBody BloqueDTO bloqueDTO) {
-        return bloqueService.findById(id)
-                .map(existingBloque -> {
-                    Bloque bloque = mapper.toBloqueEntity(bloqueDTO);
-                    bloque.setIdBloque(id);
-                    Bloque saved = bloqueService.save(bloque);
-                    return ResponseEntity.ok(mapper.toBloqueDTO(saved));
-                })
-                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")

@@ -12,6 +12,9 @@ public interface PalletVerdeRepository extends JpaRepository<PalletVerde, Intege
 
     List<PalletVerde> findByPalletEstado(String palletEstado);
 
+    org.springframework.data.domain.Page<PalletVerde> findByPalletEstado(String palletEstado,
+            org.springframework.data.domain.Pageable pageable);
+
     /*
      * 
      * select prov.prov_nombre, r.num_viaje, p.pallet_numero, tm.tipo_descripcion,

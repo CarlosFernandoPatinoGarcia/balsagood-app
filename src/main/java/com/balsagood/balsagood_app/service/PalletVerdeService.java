@@ -37,6 +37,16 @@ public class PalletVerdeService {
         return palletVerdeRepository.findAll();
     }
 
+    @Autowired
+    private com.balsagood.balsagood_app.util.AppMapper mapper;
+
+    public org.springframework.data.domain.Page<com.balsagood.balsagood_app.dto.movil.PalletVerdeDTO> findByEstadoPaginated(
+            String estado, int page, int size) {
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        return palletVerdeRepository.findByPalletEstado(estado, pageable)
+                .map(mapper::toPalletVerdeDTO);
+    }
+
     public Optional<PalletVerde> findById(Integer id) {
         return palletVerdeRepository.findById(id);
     }

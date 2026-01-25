@@ -38,6 +38,17 @@ public class BloqueService {
         return bloqueRepository.obtenerBloquesPresentados();
     }
 
+    public org.springframework.data.domain.Page<com.balsagood.balsagood_app.dto.movil.BloqueDTO> findByEstadoPaginated(
+            String estado, int page, int size) {
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        return bloqueRepository.findByEstado(estado, pageable)
+                .map(new com.balsagood.balsagood_app.util.AppMapper()::toBloqueDTO);
+    }
+
+    public Long obtenerUltimoCodigoBloque() {
+        return bloqueRepository.obtenerUltimoCodigoBloque();
+    }
+
     public Bloque save(Bloque bloque) {
         // Validation for new blocks
         if (bloque.getIdBloque() == null) {

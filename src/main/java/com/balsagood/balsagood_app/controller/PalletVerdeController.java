@@ -27,6 +27,14 @@ public class PalletVerdeController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/paginated")
+    public org.springframework.http.ResponseEntity<org.springframework.data.domain.Page<PalletVerdeDTO>> getPalletsPaginated(
+            @RequestParam(defaultValue = "MV") String estado,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return org.springframework.http.ResponseEntity.ok(palletVerdeService.findByEstadoPaginated(estado, page, size));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<PalletVerdeDTO> getPalletVerdeById(@PathVariable Integer id) {
         return palletVerdeService.findById(id)
