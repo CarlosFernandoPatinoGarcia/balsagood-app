@@ -39,7 +39,7 @@ public class SecurityConfig {
         // configuration.setAllowedOrigins(java.util.List.of("*")); // No usar con
         // allowCredentials(true)
         configuration.setAllowedOriginPatterns(java.util.List.of("*")); // Permitir todos los orígenes
-        configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(java.util.List.of("*"));
         configuration.setAllowCredentials(true);
 

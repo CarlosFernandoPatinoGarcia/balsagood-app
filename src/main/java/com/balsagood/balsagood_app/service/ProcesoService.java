@@ -12,6 +12,7 @@ import com.balsagood.balsagood_app.repository.PalletVerdeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -66,7 +67,19 @@ public class ProcesoService {
                                 "Tipo de madera no encontrado con ID: " + bloque.getTipoMadera().getIdTipoMadera()));
                 bloque.setTipoMadera(tipoMadera);
             } else {
-                throw new IllegalArgumentException("El tipo de madera es obligatorio para registrar un bloque.");
+                throw new IllegalArgumentException(
+                        "DASH-ERROR: El tipo de madera es obligatorio para registrar un bloque.");
+            }
+
+            // validar peso con cola y estado, el p. con cola debe ser mayor que el p. sin
+            // cola
+            if (bloque.getBloquePesoConCola() == null
+                    || bloque.getBloquePesoConCola().compareTo(BigDecimal.ZERO) <= 0) {
+                throw new IllegalArgumentException(
+                        "DASH-ERROR: El peso con cola es obligatorio para registrar un bloque.");
+            }
+            if (bloque.getBloquePesoConCola().compareTo(bloque.getBloquePesoSinCola()) <= 0) {
+                throw new IllegalArgumentException("DASH-ERROR: El peso con cola debe ser mayor que el peso sin cola.");
             }
         }
         return bloqueRepository.saveAll(bloques);

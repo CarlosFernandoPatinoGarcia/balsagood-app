@@ -76,6 +76,17 @@ public class BloqueController {
                 .map(existingBloque -> {
                     Bloque bloque = mapper.toBloqueEntity(bloqueDTO);
                     bloque.setIdBloque(id);
+
+                    // Restauramos las relaciones críticas que NO vienen del frontend
+                    // Si no hacemos esto, se intentan guardar como NULL y falla la BD.
+                    bloque.setOrdenTaller(existingBloque.getOrdenTaller());
+                    bloque.setCuerpo(existingBloque.getCuerpo());
+
+                    // Mantenemos el estado original si el DTO no lo especifica
+                    if (bloque.getEstado() == null) {
+                        bloque.setEstado(existingBloque.getEstado());
+                    }
+
                     Bloque saved = bloqueService.save(bloque);
                     return ResponseEntity.ok(mapper.toBloqueDTO(saved));
                 })
