@@ -39,8 +39,8 @@ public class DespachoService {
     }
 
     @org.springframework.transaction.annotation.Transactional
-    public com.balsagood.balsagood_app.dto.RegistroDespachoDTO registrarDespacho(
-            com.balsagood.balsagood_app.dto.RegistroDespachoDTO dto) {
+    public com.balsagood.balsagood_app.dto.movil.RegistroDespachoDTO registrarDespacho(
+            com.balsagood.balsagood_app.dto.movil.RegistroDespachoDTO dto) {
         // 1. Guardar Despacho
         Despacho despacho = appMapper.toDespachoEntity(dto.getDespacho());
         despacho = despachoRepository.save(despacho);
@@ -72,10 +72,10 @@ public class DespachoService {
         }
 
         // 5. Preparar Response (Full Info)
-        com.balsagood.balsagood_app.dto.RegistroDespachoDTO response = new com.balsagood.balsagood_app.dto.RegistroDespachoDTO();
+        com.balsagood.balsagood_app.dto.movil.RegistroDespachoDTO response = new com.balsagood.balsagood_app.dto.movil.RegistroDespachoDTO();
         response.setDespacho(appMapper.toDespachoDTO(despacho));
 
-        com.balsagood.balsagood_app.dto.CuerpoDTO cuerpoResponse = appMapper.toCuerpoDTO(cuerpo);
+        com.balsagood.balsagood_app.dto.movil.CuerpoDTO cuerpoResponse = appMapper.toCuerpoDTO(cuerpo);
         // Ensure idsBloques is populated in CuerpoDTO if appMapper doesn't do it
         // automatically (mapper logic dependent)
         // Checking Body Mapper: usually toCuerpoDTO might not fetch children blocks

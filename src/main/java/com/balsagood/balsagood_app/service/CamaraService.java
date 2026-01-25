@@ -53,7 +53,7 @@ public class CamaraService {
     @Autowired
     private com.balsagood.balsagood_app.util.AppMapper appMapper;
 
-    public List<com.balsagood.balsagood_app.dto.CamaraDTO> getCamarasConDisponibilidad() {
+    public List<com.balsagood.balsagood_app.dto.dashboard.CamaraDTO> getCamarasConDisponibilidad() {
         return findAll().stream() // Use filtered findAll
                 .map(appMapper::toCamaraDTO)
                 .collect(java.util.stream.Collectors.toList());

@@ -1,6 +1,6 @@
 package com.balsagood.balsagood_app.controller;
 
-import com.balsagood.balsagood_app.dto.PalletVerdeDTO;
+import com.balsagood.balsagood_app.dto.movil.PalletVerdeDTO;
 import com.balsagood.balsagood_app.model.PalletVerde;
 import com.balsagood.balsagood_app.service.PalletVerdeService;
 import com.balsagood.balsagood_app.util.AppMapper;

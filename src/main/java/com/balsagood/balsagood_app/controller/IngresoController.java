@@ -1,6 +1,6 @@
 package com.balsagood.balsagood_app.controller;
 
-import com.balsagood.balsagood_app.dto.IngresoCompletoRequest;
+import com.balsagood.balsagood_app.dto.movil.IngresoCompletoRequest;
 import com.balsagood.balsagood_app.service.PalletVerdeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

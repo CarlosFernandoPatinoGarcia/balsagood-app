@@ -1,7 +1,7 @@
 package com.balsagood.balsagood_app.service;
 
-import com.balsagood.balsagood_app.dto.RegistroInventarioBloquesDTO;
-import com.balsagood.balsagood_app.dto.RegistroInventarioPalletsDTO;
+import com.balsagood.balsagood_app.dto.dashboard.RegistroInventarioBloquesDTO;
+import com.balsagood.balsagood_app.dto.dashboard.RegistroInventarioPalletsDTO;
 import com.balsagood.balsagood_app.repository.BloqueRepository;
 import com.balsagood.balsagood_app.repository.ItemPalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;

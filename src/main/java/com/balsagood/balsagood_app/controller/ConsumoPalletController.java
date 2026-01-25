@@ -1,6 +1,6 @@
 package com.balsagood.balsagood_app.controller;
 
-import com.balsagood.balsagood_app.dto.ConsumoPalletDTO;
+import com.balsagood.balsagood_app.dto.movil.ConsumoPalletDTO;
 import com.balsagood.balsagood_app.model.ConsumoPallet;
 import com.balsagood.balsagood_app.service.ConsumoPalletService;
 import com.balsagood.balsagood_app.util.AppMapper;

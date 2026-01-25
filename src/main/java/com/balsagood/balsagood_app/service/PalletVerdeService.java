@@ -1,7 +1,7 @@
 package com.balsagood.balsagood_app.service;
 
-import com.balsagood.balsagood_app.dto.IngresoCompletoRequest;
-import com.balsagood.balsagood_app.dto.IngresoCompletoRequest.DetalleCalificacion;
+import com.balsagood.balsagood_app.dto.movil.IngresoCompletoRequest;
+import com.balsagood.balsagood_app.dto.movil.IngresoCompletoRequest.DetalleCalificacion;
 import com.balsagood.balsagood_app.model.ItemPallet;
 import com.balsagood.balsagood_app.model.PalletVerde;
 import com.balsagood.balsagood_app.model.Proveedor;
@@ -92,7 +92,7 @@ public class PalletVerdeService {
                         "Tipo de madera no encontrado con ID: " + request.getIdTipoMadera()));
         pallet.setTipoMadera(tipoMadera);
 
-        com.balsagood.balsagood_app.dto.IngresoCompletoRequest.Dimensiones dims = request.getDimensiones();
+        com.balsagood.balsagood_app.dto.movil.IngresoCompletoRequest.Dimensiones dims = request.getDimensiones();
         // Fix Width to 81
         pallet.setPalletAnchoPlantilla(new BigDecimal("81"));
 

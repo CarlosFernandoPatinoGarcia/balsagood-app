@@ -1,6 +1,6 @@
 package com.balsagood.balsagood_app.controller;
 
-import com.balsagood.balsagood_app.dto.CuerpoDTO;
+import com.balsagood.balsagood_app.dto.movil.CuerpoDTO;
 import com.balsagood.balsagood_app.model.Cuerpo;
 import com.balsagood.balsagood_app.service.CuerpoService;
 import com.balsagood.balsagood_app.util.AppMapper;

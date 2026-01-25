@@ -1,6 +1,6 @@
 package com.balsagood.balsagood_app.controller;
 
-import com.balsagood.balsagood_app.dto.RecepcionDTO;
+import com.balsagood.balsagood_app.dto.dashboard.RecepcionDTO;
 import com.balsagood.balsagood_app.model.Recepcion;
 import com.balsagood.balsagood_app.service.RecepcionService;
 import com.balsagood.balsagood_app.util.AppMapper;

@@ -1,6 +1,6 @@
 package com.balsagood.balsagood_app.controller;
 
-import com.balsagood.balsagood_app.dto.DetalleDespachoDTO;
+import com.balsagood.balsagood_app.dto.movil.DetalleDespachoDTO;
 import com.balsagood.balsagood_app.model.DetalleDespacho;
 import com.balsagood.balsagood_app.service.DetalleDespachoService;
 import com.balsagood.balsagood_app.util.AppMapper;

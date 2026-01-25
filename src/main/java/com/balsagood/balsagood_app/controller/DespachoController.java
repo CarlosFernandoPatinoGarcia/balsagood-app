@@ -1,6 +1,6 @@
 package com.balsagood.balsagood_app.controller;
 
-import com.balsagood.balsagood_app.dto.DespachoDTO;
+import com.balsagood.balsagood_app.dto.movil.DespachoDTO;
 import com.balsagood.balsagood_app.model.Despacho;
 import com.balsagood.balsagood_app.service.DespachoService;
 import com.balsagood.balsagood_app.util.AppMapper;
@@ -43,9 +43,9 @@ public class DespachoController {
     }
 
     @PostMapping("/registrar")
-    public ResponseEntity<com.balsagood.balsagood_app.dto.RegistroDespachoDTO> registrarDespacho(
-            @RequestBody com.balsagood.balsagood_app.dto.RegistroDespachoDTO dto) {
-        com.balsagood.balsagood_app.dto.RegistroDespachoDTO saved = despachoService.registrarDespacho(dto);
+    public ResponseEntity<com.balsagood.balsagood_app.dto.movil.RegistroDespachoDTO> registrarDespacho(
+            @RequestBody com.balsagood.balsagood_app.dto.movil.RegistroDespachoDTO dto) {
+        com.balsagood.balsagood_app.dto.movil.RegistroDespachoDTO saved = despachoService.registrarDespacho(dto);
         return ResponseEntity.ok(saved);
     }
 

@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DetalleDespachoRepository extends JpaRepository<DetalleDespacho, Integer> {
 
-    @org.springframework.data.jpa.repository.Query("SELECT new com.balsagood.balsagood_app.dto.BloquesDespachadosDTO(" +
+    @org.springframework.data.jpa.repository.Query("SELECT new com.balsagood.balsagood_app.dto.dashboard.BloquesDespachadosDTO("
+            +
             "d.despCodigo, " +
             "d.despFecha, " +
             "b.bloqueCodigo, " +
@@ -18,5 +19,5 @@ public interface DetalleDespachoRepository extends JpaRepository<DetalleDespacho
             "FROM Bloque b, DetalleDespacho dd " +
             "JOIN dd.despacho d " +
             "WHERE b.cuerpo = dd.cuerpo")
-    java.util.List<com.balsagood.balsagood_app.dto.BloquesDespachadosDTO> obtenerBloquesDespachados();
+    java.util.List<com.balsagood.balsagood_app.dto.dashboard.BloquesDespachadosDTO> obtenerBloquesDespachados();
 }

@@ -1,6 +1,6 @@
 package com.balsagood.balsagood_app.service;
 
-import com.balsagood.balsagood_app.dto.BloquesProducidosDTO;
+import com.balsagood.balsagood_app.dto.dashboard.BloquesPresentadosDTO;
 import com.balsagood.balsagood_app.model.Bloque;
 import com.balsagood.balsagood_app.model.OrdenTaller;
 import com.balsagood.balsagood_app.model.TipoMadera;
@@ -34,8 +34,8 @@ public class BloqueService {
         return bloqueRepository.findById(id);
     }
 
-    public List<BloquesProducidosDTO> findBloquesProducidos() {
-        return bloqueRepository.obtenerBloquesProducidos();
+    public List<BloquesPresentadosDTO> findBloquesPresentados() {
+        return bloqueRepository.obtenerBloquesPresentados();
     }
 
     public Bloque save(Bloque bloque) {

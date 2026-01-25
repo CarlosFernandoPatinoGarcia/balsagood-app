@@ -1,8 +1,23 @@
 package com.balsagood.balsagood_app.util;
 
 import com.balsagood.balsagood_app.dto.*;
+import com.balsagood.balsagood_app.dto.dashboard.BloquesPresentadosDTO;
+import com.balsagood.balsagood_app.dto.dashboard.CamaraDTO;
+import com.balsagood.balsagood_app.dto.dashboard.RecepcionDTO;
+import com.balsagood.balsagood_app.dto.movil.BloqueDTO;
+import com.balsagood.balsagood_app.dto.movil.ConsumoPalletDTO;
+import com.balsagood.balsagood_app.dto.movil.CuerpoDTO;
+import com.balsagood.balsagood_app.dto.movil.DespachoDTO;
+import com.balsagood.balsagood_app.dto.movil.DetalleDespachoDTO;
+import com.balsagood.balsagood_app.dto.movil.DetalleSecadoDTO;
+import com.balsagood.balsagood_app.dto.movil.LoteSecadoDTO;
+import com.balsagood.balsagood_app.dto.movil.OrdenTallerDTO;
+import com.balsagood.balsagood_app.dto.movil.PalletVerdeDTO;
+import com.balsagood.balsagood_app.dto.movil.ProveedorDTO;
+import com.balsagood.balsagood_app.dto.movil.TipoMaderaDTO;
 import com.balsagood.balsagood_app.model.*;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -400,18 +415,10 @@ public class AppMapper {
         return historial;
     }
 
-    // -- BloquesProducidosDTO --
-    // -- BloquesProducidosDTO --
-    public BloquesProducidosDTO toBloquesProducidosDTO(Bloque bloque) {
+    public BloquesPresentadosDTO toBloquesPresentadosDTO(List<Bloque> bloque) {
         if (bloque == null)
             return null;
-        return new BloquesProducidosDTO(
-                bloque.getBloqueCodigo(),
-                bloque.getOrdenTaller() != null ? bloque.getOrdenTaller().getOrdenFechaInicio() : null,
-                bloque.getOrdenTaller() != null ? bloque.getOrdenTaller().getOrdenFechaFin() : null,
-                bloque.getBloqueLargo() != null ? bloque.getBloqueLargo().doubleValue() : null,
-                bloque.getBloquePesoSinCola() != null ? bloque.getBloquePesoSinCola().doubleValue() : null,
-                bloque.getBloquePesoConCola() != null ? bloque.getBloquePesoConCola().doubleValue() : null,
-                bloque.getBloqueBftFinal() != null ? bloque.getBloqueBftFinal().doubleValue() : null);
+        return new BloquesPresentadosDTO(
+                bloque.stream().map(this::toBloqueDTO).collect(Collectors.toList()));
     }
 }

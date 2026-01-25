@@ -1,4 +1,4 @@
-package com.balsagood.balsagood_app.dto;
+package com.balsagood.balsagood_app.dto.dashboard;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,10 +1,12 @@
-package com.balsagood.balsagood_app.dto;
+package com.balsagood.balsagood_app.dto.movil;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import com.balsagood.balsagood_app.dto.dashboard.CamaraDTO;
 
 @Data
 @NoArgsConstructor

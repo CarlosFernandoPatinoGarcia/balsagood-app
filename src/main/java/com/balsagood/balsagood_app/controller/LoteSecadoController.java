@@ -1,6 +1,6 @@
 package com.balsagood.balsagood_app.controller;
 
-import com.balsagood.balsagood_app.dto.LoteSecadoDTO;
+import com.balsagood.balsagood_app.dto.movil.LoteSecadoDTO;
 import com.balsagood.balsagood_app.model.LoteSecado;
 import com.balsagood.balsagood_app.service.LoteSecadoService;
 import com.balsagood.balsagood_app.util.AppMapper;
@@ -36,10 +36,10 @@ public class LoteSecadoController {
     }
 
     @GetMapping("/{id}/despacho")
-    public ResponseEntity<com.balsagood.balsagood_app.dto.LoteDespachoDTO> getLoteSecadoDespachoById(
+    public ResponseEntity<com.balsagood.balsagood_app.dto.movil.LoteDespachoDTO> getLoteSecadoDespachoById(
             @PathVariable Integer id) {
         try {
-            com.balsagood.balsagood_app.dto.LoteDespachoDTO dto = loteSecadoService.obtenerDatosDespacho(id);
+            com.balsagood.balsagood_app.dto.movil.LoteDespachoDTO dto = loteSecadoService.obtenerDatosDespacho(id);
             return ResponseEntity.ok(dto);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();

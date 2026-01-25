@@ -1,6 +1,6 @@
 package com.balsagood.balsagood_app.controller;
 
-import com.balsagood.balsagood_app.dto.PalletProduccionDTO;
+import com.balsagood.balsagood_app.dto.dashboard.PalletProduccionDTO;
 import com.balsagood.balsagood_app.model.PalletVerde;
 import com.balsagood.balsagood_app.service.ProduccionPalletsService;
 import org.springframework.beans.factory.annotation.Autowired;

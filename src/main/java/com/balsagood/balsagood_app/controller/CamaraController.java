@@ -1,6 +1,6 @@
 package com.balsagood.balsagood_app.controller;
 
-import com.balsagood.balsagood_app.dto.CamaraDTO;
+import com.balsagood.balsagood_app.dto.dashboard.CamaraDTO;
 import com.balsagood.balsagood_app.model.Camara;
 import com.balsagood.balsagood_app.service.CamaraService;
 import com.balsagood.balsagood_app.util.AppMapper;

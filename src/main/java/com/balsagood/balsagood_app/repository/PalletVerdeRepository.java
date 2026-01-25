@@ -24,7 +24,7 @@ public interface PalletVerdeRepository extends JpaRepository<PalletVerde, Intege
      * 
      */
 
-    @org.springframework.data.jpa.repository.Query("SELECT new com.balsagood.balsagood_app.dto.RecepcionesMaderaVerdeDTO("
+    @org.springframework.data.jpa.repository.Query("SELECT new com.balsagood.balsagood_app.dto.dashboard.RecepcionesMaderaVerdeDTO("
             +
             "prov.provNombre, " +
             "r.numViaje, " +
@@ -38,5 +38,5 @@ public interface PalletVerdeRepository extends JpaRepository<PalletVerde, Intege
             "JOIN r.proveedor prov " +
             "JOIN p.tipoMadera tm " +
             "WHERE p.palletEstado = 'MV'")
-    List<com.balsagood.balsagood_app.dto.RecepcionesMaderaVerdeDTO> obtenerReporteRecepciones();
+    List<com.balsagood.balsagood_app.dto.dashboard.RecepcionesMaderaVerdeDTO> obtenerReporteRecepciones();
 }

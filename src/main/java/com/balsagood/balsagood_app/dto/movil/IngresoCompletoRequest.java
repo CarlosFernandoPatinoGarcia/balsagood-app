@@ -1,4 +1,4 @@
-package com.balsagood.balsagood_app.dto;
+package com.balsagood.balsagood_app.dto.movil;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.balsagood.balsagood_app.controller;
 
-import com.balsagood.balsagood_app.dto.OrdenTallerDTO;
+import com.balsagood.balsagood_app.dto.movil.OrdenTallerDTO;
 import com.balsagood.balsagood_app.model.OrdenTaller;
 import com.balsagood.balsagood_app.service.OrdenTallerService;
 import com.balsagood.balsagood_app.util.AppMapper;

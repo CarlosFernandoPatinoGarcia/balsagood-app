@@ -1,6 +1,6 @@
 package com.balsagood.balsagood_app.repository;
 
-import com.balsagood.balsagood_app.dto.RegistroInventarioPalletsDTO;
+import com.balsagood.balsagood_app.dto.dashboard.RegistroInventarioPalletsDTO;
 import com.balsagood.balsagood_app.model.ItemPallet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -33,7 +33,7 @@ public interface ItemPalletRepository extends JpaRepository<ItemPallet, Integer>
      * r.fecha_ingreso;
      */
 
-    @Query("SELECT new com.balsagood.balsagood_app.dto.RegistroInventarioPalletsDTO(" +
+    @Query("SELECT new com.balsagood.balsagood_app.dto.dashboard.RegistroInventarioPalletsDTO(" +
             "p.palletEstado, " +
             "tm.tipoDescripcion, " + // 1. Agregamos Tipo Madera
             "CAST(i.espesor AS double), " +

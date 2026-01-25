@@ -1,6 +1,6 @@
 package com.balsagood.balsagood_app.service;
 
-import com.balsagood.balsagood_app.dto.CrearLoteDTO;
+import com.balsagood.balsagood_app.dto.movil.CrearLoteDTO;
 import com.balsagood.balsagood_app.model.*;
 import com.balsagood.balsagood_app.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;

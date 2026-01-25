@@ -1,7 +1,6 @@
 package com.balsagood.balsagood_app.controller;
 
-import com.balsagood.balsagood_app.dto.TipoMaderaDTO;
-
+import com.balsagood.balsagood_app.dto.movil.TipoMaderaDTO;
 import com.balsagood.balsagood_app.service.TipoMaderaService;
 import com.balsagood.balsagood_app.util.AppMapper;
 import org.springframework.beans.factory.annotation.Autowired;

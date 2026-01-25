@@ -1,8 +1,8 @@
 package com.balsagood.balsagood_app.controller;
 
-import com.balsagood.balsagood_app.dto.CrearLoteDTO;
-import com.balsagood.balsagood_app.dto.LoteSecadoDTO;
-import com.balsagood.balsagood_app.dto.PalletVerdeDTO;
+import com.balsagood.balsagood_app.dto.movil.CrearLoteDTO;
+import com.balsagood.balsagood_app.dto.movil.LoteSecadoDTO;
+import com.balsagood.balsagood_app.dto.movil.PalletVerdeDTO;
 import com.balsagood.balsagood_app.model.LoteSecado;
 import com.balsagood.balsagood_app.model.PalletVerde;
 import com.balsagood.balsagood_app.service.GestionSecadoService;
