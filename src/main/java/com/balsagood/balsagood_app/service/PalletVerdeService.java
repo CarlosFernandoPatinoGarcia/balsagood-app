@@ -9,6 +9,8 @@ import com.balsagood.balsagood_app.model.TipoMadera;
 import com.balsagood.balsagood_app.repository.PalletVerdeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -59,7 +61,7 @@ public class PalletVerdeService {
         palletVerdeRepository.deleteById(id);
     }
 
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public void procesarIngresoCompleto(IngresoCompletoRequest request) {
         // 1. Gestión de Proveedor
         Proveedor proveedor = null;
@@ -163,6 +165,18 @@ public class PalletVerdeService {
         pallet.setPalletEstado("MV");
 
         pallet = palletVerdeRepository.save(pallet);
+    }
+
+    @Transactional // Importante: Todo o nada. Si falla un pallet, no se guarda ninguno del lote.
+    public void procesarListaPallets(List<IngresoCompletoRequest> listaRequests) {
+        if (listaRequests == null || listaRequests.isEmpty()) {
+            throw new IllegalArgumentException("La lista de pallets no puede estar vacía.");
+        }
+
+        // Iteramos y reutilizamos la lógica que YA TIENES
+        for (IngresoCompletoRequest request : listaRequests) {
+            procesarIngresoCompleto(request);
+        }
     }
 
     private void recalcularTotalesPallet(PalletVerde pallet) {
