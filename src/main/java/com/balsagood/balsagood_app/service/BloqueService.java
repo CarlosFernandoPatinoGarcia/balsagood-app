@@ -1,14 +1,19 @@
 package com.balsagood.balsagood_app.service;
 
 import com.balsagood.balsagood_app.dto.dashboard.BloquesPresentadosDTO;
+import com.balsagood.balsagood_app.dto.movil.BloqueDTO;
 import com.balsagood.balsagood_app.model.Bloque;
 import com.balsagood.balsagood_app.model.OrdenTaller;
 import com.balsagood.balsagood_app.model.TipoMadera;
 import com.balsagood.balsagood_app.repository.BloqueRepository;
 import com.balsagood.balsagood_app.repository.OrdenTallerRepository;
 import com.balsagood.balsagood_app.repository.TipoMaderaRepository;
+import com.balsagood.balsagood_app.util.AppMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
@@ -38,11 +43,11 @@ public class BloqueService {
         return bloqueRepository.obtenerBloquesPresentados();
     }
 
-    public org.springframework.data.domain.Page<com.balsagood.balsagood_app.dto.movil.BloqueDTO> findByEstadoPaginated(
+    public Page<BloqueDTO> findByEstadoPaginated(
             String estado, int page, int size) {
-        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size);
         return bloqueRepository.findByEstado(estado, pageable)
-                .map(new com.balsagood.balsagood_app.util.AppMapper()::toBloqueDTO);
+                .map(new AppMapper()::toBloqueDTO);
     }
 
     public Long obtenerUltimoCodigoBloque() {
@@ -50,16 +55,14 @@ public class BloqueService {
     }
 
     public Bloque save(Bloque bloque) {
-        // Validation for new blocks
+        // Agregar como "Presentado" un bloque si es primera vez que se registra
         if (bloque.getIdBloque() == null) {
             if (bloque.getEstado() == null) {
                 bloque.setEstado("PR");
             }
 
-            // Assign active OrdenTaller if not present (or validate the one sent)
-            // Strategy: Always fetch active order to ensure consistency.
-            // If the DTO sent an ID, we could validate it matches active, but fetching
-            // active is safer for defining "current context".
+            // Asignar una orden de taller activa, si no existe, lanzará un mensaje de
+            // error.
             OrdenTaller ordenActiva = ordenTallerRepository
                     .findFirstByOrdenFechaFinIsNull()
                     .orElseThrow(() -> new IllegalArgumentException(
@@ -68,14 +71,15 @@ public class BloqueService {
             bloque.setOrdenTaller(ordenActiva);
         }
 
-        // Validate and assign TipoMadera if present (to ensure it is managed)
+        // Validar si existe el tipo de madera de un bloque.
         if (bloque.getTipoMadera() != null && bloque.getTipoMadera().getIdTipoMadera() != null) {
             TipoMadera tipoMadera = tipoMaderaRepository.findById(bloque.getTipoMadera().getIdTipoMadera())
                     .orElseThrow(() -> new IllegalArgumentException(
                             "Tipo de madera no encontrado con ID: " + bloque.getTipoMadera().getIdTipoMadera()));
             bloque.setTipoMadera(tipoMadera);
         } else if (bloque.getTipoMadera() == null) {
-            // Optional: throw exception if TipoMadera is mandatory
+            // El tipo de madera es obligatorio. Lanzará un error si no se le asignó un
+            // tipo.
             throw new IllegalArgumentException("El tipo de madera es obligatorio para registrar un bloque.");
         }
         return bloqueRepository.save(bloque);

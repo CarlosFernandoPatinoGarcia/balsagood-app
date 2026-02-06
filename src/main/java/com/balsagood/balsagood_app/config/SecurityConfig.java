@@ -22,11 +22,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Desactivar CSRF para APIs
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Usar configuración CORS explícita
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // ¡Login público!
+                        .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated() // Todo lo demás requiere token
                 )
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // No usar
-                                                                                                        // cookies/sesiones
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 

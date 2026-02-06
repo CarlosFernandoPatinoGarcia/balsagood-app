@@ -2,12 +2,23 @@ package com.balsagood.balsagood_app.service;
 
 import com.balsagood.balsagood_app.dto.movil.IngresoCompletoRequest;
 import com.balsagood.balsagood_app.dto.movil.IngresoCompletoRequest.DetalleCalificacion;
+import com.balsagood.balsagood_app.dto.movil.PalletVerdeDTO;
 import com.balsagood.balsagood_app.model.ItemPallet;
 import com.balsagood.balsagood_app.model.PalletVerde;
 import com.balsagood.balsagood_app.model.Proveedor;
+import com.balsagood.balsagood_app.model.Recepcion;
 import com.balsagood.balsagood_app.model.TipoMadera;
+import com.balsagood.balsagood_app.repository.ItemPalletRepository;
 import com.balsagood.balsagood_app.repository.PalletVerdeRepository;
+import com.balsagood.balsagood_app.repository.ProveedorRepository;
+import com.balsagood.balsagood_app.repository.RecepcionRepository;
+import com.balsagood.balsagood_app.repository.TipoMaderaRepository;
+import com.balsagood.balsagood_app.util.AppMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,27 +35,27 @@ public class PalletVerdeService {
     private PalletVerdeRepository palletVerdeRepository;
 
     @Autowired
-    private com.balsagood.balsagood_app.repository.ProveedorRepository proveedorRepository;
+    private ProveedorRepository proveedorRepository;
 
     @Autowired
-    private com.balsagood.balsagood_app.repository.RecepcionRepository recepcionRepository;
+    private RecepcionRepository recepcionRepository;
 
     @Autowired
-    private com.balsagood.balsagood_app.repository.ItemPalletRepository itemPalletRepository;
+    private ItemPalletRepository itemPalletRepository;
 
     @Autowired
-    private com.balsagood.balsagood_app.repository.TipoMaderaRepository tipoMaderaRepository;
+    private TipoMaderaRepository tipoMaderaRepository;
 
     public List<PalletVerde> findAll() {
         return palletVerdeRepository.findAll();
     }
 
     @Autowired
-    private com.balsagood.balsagood_app.util.AppMapper mapper;
+    private AppMapper mapper;
 
-    public org.springframework.data.domain.Page<com.balsagood.balsagood_app.dto.movil.PalletVerdeDTO> findByEstadoPaginated(
+    public Page<PalletVerdeDTO> findByEstadoPaginated(
             String estado, int page, int size) {
-        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size);
         return palletVerdeRepository.findByPalletEstado(estado, pageable)
                 .map(mapper::toPalletVerdeDTO);
     }
@@ -82,7 +93,7 @@ public class PalletVerdeService {
         }
 
         // 2. Creación de Recepción
-        com.balsagood.balsagood_app.model.Recepcion recepcion = new com.balsagood.balsagood_app.model.Recepcion();
+        Recepcion recepcion = new Recepcion();
         recepcion.setProveedor(proveedor);
         recepcion.setNumViaje(request.getNumViaje());
         recepcion.setFechaIngreso(
@@ -104,19 +115,22 @@ public class PalletVerdeService {
                         "Tipo de madera no encontrado con ID: " + request.getIdTipoMadera()));
         pallet.setTipoMadera(tipoMadera);
 
-        com.balsagood.balsagood_app.dto.movil.IngresoCompletoRequest.Dimensiones dims = request.getDimensiones();
         // Fix Width to 81
         pallet.setPalletAnchoPlantilla(new BigDecimal("81"));
 
-        // New BFT Calculation Logic: Sum of (L * 81 * E * Q) / 12 for each
-        // qualification
-        // With support for 'Castigo' (Punishment)
+        // Formula para Cubicar Pallets: BFT = (Largo * (81 -> Ancho de plantilla) *
+        // Espesor *
+        // Cantidad de plantillas) / 12
+        // Se aplica castigo
+
         BigDecimal totalBftRecibido = BigDecimal.ZERO;
         BigDecimal totalBftAceptado = BigDecimal.ZERO;
 
         if (request.getCalificaciones() != null) {
             List<ItemPallet> items = new ArrayList<>();
 
+            // Se itera por todas las calificaciones de cada pallet para sumarlas y obtener
+            // el BFT Total con castigo incluido
             for (DetalleCalificacion cal : request
                     .getCalificaciones()) {
                 ItemPallet item = new ItemPallet();
@@ -131,7 +145,8 @@ public class PalletVerdeService {
                 item.setEspesor(espesor);
                 item.setCantidad(cantidadVal);
                 item.setEsCastigada(esCastigada);
-                // Only set original length if it adheres to logic, using default from DTO
+                // Seteamos el largo original por si existe más de una calificación en el
+                // pallet.
                 item.setLargoOriginal(cal.getLargoOriginal());
 
                 BigDecimal bftItemRecibido;
@@ -167,13 +182,18 @@ public class PalletVerdeService {
         pallet = palletVerdeRepository.save(pallet);
     }
 
-    @Transactional // Importante: Todo o nada. Si falla un pallet, no se guarda ninguno del lote.
+    @Transactional
+    /**
+     * Esta función recibe una lista que el frontend Web envía. Se reutiliza la
+     * lógica donde se registraban pallets uno por uno.
+     * 
+     * @param listaRequests
+     */
     public void procesarListaPallets(List<IngresoCompletoRequest> listaRequests) {
         if (listaRequests == null || listaRequests.isEmpty()) {
             throw new IllegalArgumentException("La lista de pallets no puede estar vacía.");
         }
 
-        // Iteramos y reutilizamos la lógica que YA TIENES
         for (IngresoCompletoRequest request : listaRequests) {
             procesarIngresoCompleto(request);
         }
@@ -214,10 +234,10 @@ public class PalletVerdeService {
         ItemPallet item = itemPalletRepository.findById(idItem).orElseThrow();
         PalletVerde pallet = item.getPalletVerde();
 
-        itemPalletRepository.delete(item); // Borras el hijo
-        pallet.getItems().remove(item); // Actualizas la lista en memoria (importante para el cálculo)
+        itemPalletRepository.delete(item);
+        pallet.getItems().remove(item);
 
-        recalcularTotalesPallet(pallet); // Recalculas y guardas el padre
+        recalcularTotalesPallet(pallet);
     }
 
     private BigDecimal calculateBft(BigDecimal largo, BigDecimal espesor, BigDecimal cantidad) {

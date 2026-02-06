@@ -54,9 +54,6 @@ public class CuerpoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Endpoint /agrupar removed as logic is now handled in
-    // DespachoService.registrarDespacho
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCuerpo(@PathVariable Integer id) {
         if (cuerpoService.findById(id).isPresent()) {

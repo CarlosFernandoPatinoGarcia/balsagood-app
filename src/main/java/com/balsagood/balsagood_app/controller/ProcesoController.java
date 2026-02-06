@@ -1,5 +1,6 @@
 package com.balsagood.balsagood_app.controller;
 
+import com.balsagood.balsagood_app.dto.dashboard.BloquesDespachadosDTO;
 import com.balsagood.balsagood_app.dto.dashboard.BloquesPresentadosDTO;
 import com.balsagood.balsagood_app.dto.dashboard.DetallePalletsSecosDTO;
 import com.balsagood.balsagood_app.dto.dashboard.RecepcionesMaderaVerdeDTO;
@@ -7,6 +8,8 @@ import com.balsagood.balsagood_app.dto.movil.BloqueDTO;
 import com.balsagood.balsagood_app.model.Bloque;
 
 import com.balsagood.balsagood_app.service.ProcesoService;
+import com.balsagood.balsagood_app.util.AppMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +28,7 @@ public class ProcesoController {
     private ProcesoService procesoService;
 
     @Autowired
-    private com.balsagood.balsagood_app.util.AppMapper appMapper;
+    private AppMapper appMapper;
 
     @GetMapping("/recepciones-madera-verde")
     public ResponseEntity<List<RecepcionesMaderaVerdeDTO>> obtenerReporteRecepciones() {
@@ -41,8 +44,8 @@ public class ProcesoController {
     }
 
     @GetMapping("/bloques-despachados")
-    public ResponseEntity<List<com.balsagood.balsagood_app.dto.dashboard.BloquesDespachadosDTO>> obtenerBloquesDespachados() {
-        List<com.balsagood.balsagood_app.dto.dashboard.BloquesDespachadosDTO> reporte = procesoService
+    public ResponseEntity<List<BloquesDespachadosDTO>> obtenerBloquesDespachados() {
+        List<BloquesDespachadosDTO> reporte = procesoService
                 .obtenerBloquesDespachados();
         return ResponseEntity.ok(reporte);
     }

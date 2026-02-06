@@ -9,6 +9,7 @@ import com.balsagood.balsagood_app.model.PalletVerde;
 import com.balsagood.balsagood_app.repository.DetalleSecadoRepository;
 import com.balsagood.balsagood_app.repository.LoteSecadoRepository;
 import com.balsagood.balsagood_app.repository.PalletVerdeRepository;
+import com.balsagood.balsagood_app.util.AppMapper;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class LoteSecadoService {
     private PalletVerdeRepository palletVerdeRepository;
 
     @Autowired
-    private com.balsagood.balsagood_app.util.AppMapper appMapper;
+    private AppMapper appMapper;
 
     public List<LoteSecado> findAll() {
         return loteSecadoRepository.findAll();

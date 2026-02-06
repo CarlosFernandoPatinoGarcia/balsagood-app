@@ -11,9 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BloquesDespachadosDTO {
 
-    /*
-     * 
-     */
     private String codigoDespacho; // Codigo del despacho
     private LocalDate fechaDespacho; // Fecha de despacho o exportacion
     private Long codigoBloque; // Codigo del bloque

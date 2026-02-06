@@ -1,8 +1,10 @@
 package com.balsagood.balsagood_app.repository;
 
+import com.balsagood.balsagood_app.dto.dashboard.DetallePalletsSecosDTO;
 import com.balsagood.balsagood_app.model.DetalleSecado;
 import com.balsagood.balsagood_app.model.LoteSecado;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
@@ -12,7 +14,7 @@ public interface DetalleSecadoRepository extends JpaRepository<DetalleSecado, In
 
     List<DetalleSecado> findByLoteSecado_IdLote(Integer idLote);
 
-    @org.springframework.data.jpa.repository.Query("SELECT new com.balsagood.balsagood_app.dto.dashboard.DetallePalletsSecosDTO("
+    @Query("SELECT new com.balsagood.balsagood_app.dto.dashboard.DetallePalletsSecosDTO("
             +
             "ls.loteCodigo, " +
             "CONCAT(r.numViaje, ' ', p.palletNumero), " +
@@ -27,5 +29,5 @@ public interface DetalleSecadoRepository extends JpaRepository<DetalleSecado, In
             "JOIN p.recepcion r " +
             "JOIN ls.camara c " +
             "WHERE p.palletEstado = 'SE'")
-    List<com.balsagood.balsagood_app.dto.dashboard.DetallePalletsSecosDTO> obtenerDetallePalletsSecos();
+    List<DetallePalletsSecosDTO> obtenerDetallePalletsSecos();
 }

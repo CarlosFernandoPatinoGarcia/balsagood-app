@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegistroInventarioBloquesDTO {
-    private String estado; // "PRESENTADO" or "ENCOLADO"
-    private String tipoMadera; // "L" or "P"
+    private String estado; // ("PR" -> PRESENTADO) or ("EN" -> ENCOLADO)
+    private String tipoMadera; // ("L" -> Liviana) or ("P" -> Pesada)
     private Double largo; // 25, 24, 23, 22, 21, 20, 18, 16, 14, 12, 10, 8, 6
     private Long cantidad; // Count
     private BigDecimal totalBft; // Sum of BFT

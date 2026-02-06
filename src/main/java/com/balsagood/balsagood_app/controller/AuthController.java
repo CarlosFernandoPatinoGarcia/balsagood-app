@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.balsagood.balsagood_app.dto.LoginRequestDTO;
+import com.balsagood.balsagood_app.model.Usuario;
 import com.balsagood.balsagood_app.config.JwtService;
 
 @RestController
@@ -39,20 +40,20 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody com.balsagood.balsagood_app.dto.RegisterRequestDTO request) {
-        // 1. Check if user exists
+        // 1. Verificar que el usuario exista
         if (usuarioRepository.findByUsuarioNombre(request.getUsuarioNombre()).isPresent()) {
             return ResponseEntity.badRequest().body("El nombre de usuario ya existe.");
         }
 
-        // 2. Create User
-        com.balsagood.balsagood_app.model.Usuario user = new com.balsagood.balsagood_app.model.Usuario();
+        // 2. Crear un usuario
+        Usuario user = new Usuario();
         user.setUsuarioNombre(request.getUsuarioNombre());
         user.setUsuarioClave(passwordEncoder.encode(request.getUsuarioClave()));
         user.setUsuarioEstado('A'); // Active by default
 
         usuarioRepository.save(user);
 
-        // 3. Generate Token
+        // 3. Generar el token
         String token = jwtService.generateToken(request.getUsuarioNombre());
 
         return ResponseEntity.ok(token);

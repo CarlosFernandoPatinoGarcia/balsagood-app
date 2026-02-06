@@ -1,11 +1,16 @@
 package com.balsagood.balsagood_app.service;
 
+import com.balsagood.balsagood_app.dto.dashboard.CamaraDTO;
 import com.balsagood.balsagood_app.model.Camara;
 import com.balsagood.balsagood_app.repository.CamaraRepository;
+import com.balsagood.balsagood_app.repository.LoteSecadoRepository;
+import com.balsagood.balsagood_app.util.AppMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CamaraService {
@@ -26,7 +31,7 @@ public class CamaraService {
     }
 
     @Autowired
-    private com.balsagood.balsagood_app.repository.LoteSecadoRepository loteSecadoRepository;
+    private LoteSecadoRepository loteSecadoRepository;
 
     public void deleteById(Integer id) {
         camaraRepository.deleteById(id);
@@ -41,21 +46,21 @@ public class CamaraService {
 
     public List<Camara> findAvailable() {
         List<Integer> occupiedIds = loteSecadoRepository.findOccupiedCamaraIds();
-        List<Camara> allCamaras = findAll(); // Use filtered findAll
+        List<Camara> allCamaras = findAll();
         if (occupiedIds.isEmpty()) {
             return allCamaras;
         }
         return allCamaras.stream()
                 .filter(c -> !occupiedIds.contains(c.getIdCamara()))
-                .collect(java.util.stream.Collectors.toList());
+                .collect(Collectors.toList());
     }
 
     @Autowired
-    private com.balsagood.balsagood_app.util.AppMapper appMapper;
+    private AppMapper appMapper;
 
-    public List<com.balsagood.balsagood_app.dto.dashboard.CamaraDTO> getCamarasConDisponibilidad() {
-        return findAll().stream() // Use filtered findAll
+    public List<CamaraDTO> getCamarasConDisponibilidad() {
+        return findAll().stream()
                 .map(appMapper::toCamaraDTO)
-                .collect(java.util.stream.Collectors.toList());
+                .collect(Collectors.toList());
     }
 }

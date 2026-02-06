@@ -23,7 +23,6 @@ public class TipoMaderaController {
 
     @GetMapping
     public List<TipoMaderaDTO> getAll() {
-        // Return a list of DTOs
         return tipoMaderaService.findAll().stream()
                 .map(appMapper::toTipoMaderaDTO)
                 .collect(Collectors.toList());

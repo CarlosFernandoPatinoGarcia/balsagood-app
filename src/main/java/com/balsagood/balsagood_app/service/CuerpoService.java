@@ -29,7 +29,4 @@ public class CuerpoService {
         cuerpoRepository.deleteById(id);
     }
 
-    // This method is deprecated/superseded by DespachoService.registrarDespacho
-    // which handles grouping and state change
-    // public Cuerpo agruparBloques(...) { ... }
 }

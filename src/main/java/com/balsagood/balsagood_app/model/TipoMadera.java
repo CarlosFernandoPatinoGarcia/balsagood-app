@@ -5,12 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/*
-     * 
-     * "id_tipo_madera" "tipo_descripcion"
-     * 1 "L"
-     * 2 "P"
-     */
 @Entity
 @Table(name = "tipo_madera")
 @Data

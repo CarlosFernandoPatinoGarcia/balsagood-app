@@ -29,7 +29,7 @@ public class DetalleSecadoService {
     public DetalleSecado save(DetalleSecado detalleSecado) {
         DetalleSecado saved = detalleSecadoRepository.save(detalleSecado);
 
-        // Update Pallet State to 'SECADORA'
+        // Aquí se cambia el estado del pallet a 'SE': 'SECADORA'
         if (saved.getPalletVerde() != null) {
             PalletVerde pallet = palletVerdeRepository.findById(saved.getPalletVerde().getIdPallet())
                     .orElse(null);

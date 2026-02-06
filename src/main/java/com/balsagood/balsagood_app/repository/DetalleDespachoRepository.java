@@ -1,13 +1,18 @@
 package com.balsagood.balsagood_app.repository;
 
+import com.balsagood.balsagood_app.dto.dashboard.BloquesDespachadosDTO;
 import com.balsagood.balsagood_app.model.DetalleDespacho;
+
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DetalleDespachoRepository extends JpaRepository<DetalleDespacho, Integer> {
 
-    @org.springframework.data.jpa.repository.Query("SELECT new com.balsagood.balsagood_app.dto.dashboard.BloquesDespachadosDTO("
+    @Query("SELECT new com.balsagood.balsagood_app.dto.dashboard.BloquesDespachadosDTO("
             +
             "d.despCodigo, " +
             "d.despFecha, " +
@@ -19,5 +24,5 @@ public interface DetalleDespachoRepository extends JpaRepository<DetalleDespacho
             "FROM Bloque b, DetalleDespacho dd " +
             "JOIN dd.despacho d " +
             "WHERE b.cuerpo = dd.cuerpo")
-    java.util.List<com.balsagood.balsagood_app.dto.dashboard.BloquesDespachadosDTO> obtenerBloquesDespachados();
+    List<BloquesDespachadosDTO> obtenerBloquesDespachados();
 }

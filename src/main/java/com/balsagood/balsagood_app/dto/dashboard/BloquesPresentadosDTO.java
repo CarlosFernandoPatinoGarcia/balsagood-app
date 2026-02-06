@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BloquesPresentadosDTO {
-    private List<BloqueDTO> bloques;
+    private List<BloqueDTO> bloques; // Lista de bloques
 }

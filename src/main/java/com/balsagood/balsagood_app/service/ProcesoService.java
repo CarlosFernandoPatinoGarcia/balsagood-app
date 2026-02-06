@@ -5,10 +5,15 @@ import com.balsagood.balsagood_app.dto.dashboard.BloquesPresentadosDTO;
 import com.balsagood.balsagood_app.dto.dashboard.DetallePalletsSecosDTO;
 import com.balsagood.balsagood_app.dto.dashboard.RecepcionesMaderaVerdeDTO;
 import com.balsagood.balsagood_app.model.Bloque;
+import com.balsagood.balsagood_app.model.OrdenTaller;
+import com.balsagood.balsagood_app.model.TipoMadera;
 import com.balsagood.balsagood_app.repository.BloqueRepository;
 import com.balsagood.balsagood_app.repository.DetalleDespachoRepository;
 import com.balsagood.balsagood_app.repository.DetalleSecadoRepository;
+import com.balsagood.balsagood_app.repository.OrdenTallerRepository;
 import com.balsagood.balsagood_app.repository.PalletVerdeRepository;
+import com.balsagood.balsagood_app.repository.TipoMaderaRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,10 +36,10 @@ public class ProcesoService {
     private BloqueRepository bloqueRepository;
 
     @Autowired
-    private com.balsagood.balsagood_app.repository.OrdenTallerRepository ordenTallerRepository;
+    private OrdenTallerRepository ordenTallerRepository;
 
     @Autowired
-    private com.balsagood.balsagood_app.repository.TipoMaderaRepository tipoMaderaRepository;
+    private TipoMaderaRepository tipoMaderaRepository;
 
     public List<RecepcionesMaderaVerdeDTO> obtenerReporteRecepciones() {
         return palletVerdeRepository.obtenerReporteRecepciones();
@@ -50,7 +55,7 @@ public class ProcesoService {
 
     public List<Bloque> registrarBloquesPresentados(List<Bloque> bloques) {
         // Enforce active OrdenTaller for consistency
-        com.balsagood.balsagood_app.model.OrdenTaller ordenActiva = ordenTallerRepository
+        OrdenTaller ordenActiva = ordenTallerRepository
                 .findFirstByOrdenFechaFinIsNull()
                 .orElseThrow(() -> new IllegalArgumentException(
                         "No hay una Orden de Taller activa. Inicie una orden antes de registrar bloques."));
@@ -61,7 +66,7 @@ public class ProcesoService {
 
             // Validate and fetch TipoMadera
             if (bloque.getTipoMadera() != null && bloque.getTipoMadera().getIdTipoMadera() != null) {
-                com.balsagood.balsagood_app.model.TipoMadera tipoMadera = tipoMaderaRepository
+                TipoMadera tipoMadera = tipoMaderaRepository
                         .findById(bloque.getTipoMadera().getIdTipoMadera())
                         .orElseThrow(() -> new IllegalArgumentException(
                                 "Tipo de madera no encontrado con ID: " + bloque.getTipoMadera().getIdTipoMadera()));

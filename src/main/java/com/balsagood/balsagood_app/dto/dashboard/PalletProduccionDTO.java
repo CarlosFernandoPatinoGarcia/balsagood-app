@@ -12,5 +12,5 @@ public class PalletProduccionDTO {
     private String tipoMadera;
     private Integer numViaje;
     private Integer palletNumero;
-    private String codigo; // "numViaje-palletNumero"
+    private String codigo;
 }

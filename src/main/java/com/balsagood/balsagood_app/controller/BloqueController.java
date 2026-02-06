@@ -28,6 +28,17 @@ public class BloqueController {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Endpoint para paginar registos de bloques para evitar enviar todos los
+     * registros.
+     * De modo que, si existe 1 millon de bloques, se los envíe por partes, y no ese
+     * millón.
+     * 
+     * @param estado
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping("/paginated")
     public org.springframework.http.ResponseEntity<org.springframework.data.domain.Page<BloqueDTO>> getBloquesPaginated(
             @RequestParam(defaultValue = "EN") String estado,
